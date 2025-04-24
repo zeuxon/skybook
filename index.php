@@ -20,6 +20,7 @@ $isLoggedIn = isset($_SESSION['username']);
         <ul>
             <?php if ($isLoggedIn): ?>
                 <li><a href="controllers/RepuloterController.php">Repülőtér kezelése</a></li>
+                <li><a href="controllers/UtController.php">Útvonalak kezelése</a></li>
                 <li><a href="controllers/LogoutController.php">Kijelentkezés</a></li>
             <?php else: ?>
                 <li><a href="views/login.html">Bejelentkezés</a></li>

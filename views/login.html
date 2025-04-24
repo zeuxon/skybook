@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Bejelentkezés</title>
 </head>
 <body>
-    <h1>Login</h1>
+    <a href="../index.php">Vissza</a>
+    <h1>Bejelentkezés</h1>
     <form method="POST" action="../controllers/LoginController.php">
-        <label for="username">Username:</label>
+        <label for="username">Felhasználónév:</label>
         <input type="text" id="username" name="username" required><br>
-        <label for="password">Password:</label>
+        <label for="password">Jelszó:</label>
         <input type="password" id="password" name="password" required><br>
-        <button type="submit" name="login">Login</button>
+        <button type="submit" name="login">Bejelentkezés</button>
     </form>
 </body>
 </html>
