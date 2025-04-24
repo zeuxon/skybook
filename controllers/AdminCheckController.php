@@ -1,9 +1,9 @@
 <?php
-require 'connection.php';
+require '../config/connection.php';
 
 session_start();
 if (!isset($_SESSION['username'])) {
-    header("Location: login.html");
+    header("Location: ../views/login.html");
     exit();
 }
 

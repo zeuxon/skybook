@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Repülőtér kezelése</h1>
-    <form method="POST" action="../controllers/repuloter_function.php">
+    <form method="POST" action="../controllers/RepuloterController.php">
         <label for="repuloter_id">Repülőtér ID (csak módosításhoz/törléshez):</label>
         <input type="number" id="repuloter_id" name="repuloter_id"><br>
         <label for="nev">Név:</label>
@@ -20,5 +20,27 @@
         <button type="submit" name="action" value="edit">Módosítás</button>
         <button type="submit" name="action" value="delete">Törlés</button>
     </form>
+
+    <h1>Repülőterek</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Név</th>
+                <th>Város</th>
+                <th>Ország</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($airports as $airport): ?>
+                <tr>
+                    <td><?= htmlspecialchars($airport['REPULOTER_ID']) ?></td>
+                    <td><?= htmlspecialchars($airport['NEV']) ?></td>
+                    <td><?= htmlspecialchars($airport['VAROS']) ?></td>
+                    <td><?= htmlspecialchars($airport['ORSZAG']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </body>
 </html>

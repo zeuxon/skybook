@@ -1,5 +1,5 @@
 <?php
-require 'connection.php';
+require '../config/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     $username = htmlspecialchars($_POST['username']);
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         oci_bind_by_name($stid, ':email', $email);
 
         if (oci_execute($stid)) {
-            header("Location: index.php");
+            header("Location: ../index.php");
         } else {
             $e = oci_error($stid);
             echo "Error: " . htmlentities($e['message'], ENT_QUOTES);

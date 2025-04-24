@@ -19,8 +19,8 @@ $isLoggedIn = isset($_SESSION['username']);
     <nav>
         <ul>
             <?php if ($isLoggedIn): ?>
-                <li><a href="views/repuloter_form.html">Repülőtér kezelése</a></li>
-                <li><a href="controllers/logout.php">Kijelentkezés</a></li>
+                <li><a href="controllers/RepuloterController.php">Repülőtér kezelése</a></li>
+                <li><a href="controllers/LogoutController.php">Kijelentkezés</a></li>
             <?php else: ?>
                 <li><a href="views/login.html">Bejelentkezés</a></li>
                 <li><a href="views/register.html">Regisztráció</a></li>
