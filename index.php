@@ -21,6 +21,13 @@ $isLoggedIn = isset($_SESSION['username']);
             <?php if ($isLoggedIn): ?>
                 <li><a href="controllers/RepuloterController.php">Repülőtér kezelése</a></li>
                 <li><a href="controllers/UtController.php">Útvonalak kezelése</a></li>
+                <li><a href="controllers/LegitarsasagController.php">Légitársaság kezelése</a></li>
+                <li><a href="controllers/RepulogepController.php">Repülőgép kezelése</a></li>
+                <li><a href="controllers/RepulojaratController.php">Repülőjárat kezelése</a></li>
+                <li><a href="controllers/FoglalasController.php">Foglalás kezelése</a></li>
+                <li><a href="controllers/BiztositasController.php">Biztosítás kezelése</a></li>
+                <li><a href="controllers/JegykategoriaController.php">Jegykategória kezelése</a></li>
+                <li><a href="controllers/JegyController.php">Jegy kezelése</a></li>
                 <li><a href="controllers/LogoutController.php">Kijelentkezés</a></li>
             <?php else: ?>
                 <li><a href="views/login.html">Bejelentkezés</a></li>

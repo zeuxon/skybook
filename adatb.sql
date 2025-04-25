@@ -17,8 +17,6 @@ CREATE TABLE Felhasznalo (
     telepules VARCHAR(100)
 );
 
-CREATE SEQUENCE FELHASZNALO_SEQ START WITH 6 INCREMENT BY 1;
-
 CREATE TABLE Ut (
     ut_id NUMBER PRIMARY KEY,
     indulasi_repuloter_id NUMBER(5) NOT NULL,
@@ -85,8 +83,6 @@ CREATE TABLE Jegy (
     jarat_id NUMBER(5) NOT NULL,
     jegykategoria_id NUMBER(5) NOT NULL,
     ar NUMBER(10) NOT NULL,
-    szekhely NUMBER(3) NOT NULL,
-    foglalasido DATE NOT NULL,
     FOREIGN KEY (foglalas_id) REFERENCES Foglalas(foglalas_id) ON DELETE CASCADE,
     FOREIGN KEY (jarat_id) REFERENCES Repulojarat(jaratid) ON DELETE CASCADE,
     FOREIGN KEY (jegykategoria_id) REFERENCES Jegykategoria(jegykategoria_id) ON DELETE CASCADE
@@ -152,8 +148,8 @@ INSERT INTO Jegykategoria VALUES (3, 'Business', 20);
 INSERT INTO Jegykategoria VALUES (4, 'First Class', 30);
 INSERT INTO Jegykategoria VALUES (5, 'Diák kedvezmény', 15);
 
-INSERT INTO Jegy VALUES (1, 1, 1, 1, 20000, 12, DATE '2025-03-20');
-INSERT INTO Jegy VALUES (2, 2, 2, 2, 30000, 15, DATE '2025-03-21');
-INSERT INTO Jegy VALUES (3, 3, 3, 3, 50000, 20, DATE '2025-03-22');
-INSERT INTO Jegy VALUES (4, 4, 4, 4, 70000, 5, DATE '2025-03-23');
-INSERT INTO Jegy VALUES (5, 5, 5, 5, 15000, 30, DATE '2025-03-24');
+INSERT INTO Jegy VALUES (1, 1, 1, 1, 20000);
+INSERT INTO Jegy VALUES (2, 2, 2, 2, 30000);
+INSERT INTO Jegy VALUES (3, 3, 3, 3, 50000);
+INSERT INTO Jegy VALUES (4, 4, 4, 4, 70000);
+INSERT INTO Jegy VALUES (5, 5, 5, 5, 15000);
