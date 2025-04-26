@@ -1,6 +1,13 @@
 <?php
-require '../models/FoglalasModel.php';
-require '../config/connection.php';
+require '../../controllers/AdminCheckController.php';
+require '../../models/FoglalasModel.php';
+require '../../config/connection.php';
+
+if (!isset($_SESSION['username']) || !isAdmin($_SESSION['username'])) {
+    header("HTTP/1.1 403 Forbidden");
+    echo "Ehhez az oldalhoz nincs jogosultsága. <br> <a href='../../index.php'>Vissza a főoldalra</a>";
+    exit();
+}
 
 $model = new FoglalasModel($conn);
 
@@ -20,15 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($success) {
-        header('Location: ../controllers/FoglalasController.php');
+        header('Location: ../../controllers/admin/FoglalasController.php');
     } else {
         echo "Operation failed.";
     }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $bookings = $model->getAllBookings(); // Fetch all bookings
-    $users = $model->getAllUsers(); // Fetch all users
-    include '../views/foglalas.php'; // Pass data to the view
+    $bookings = $model->getAllBookings();
+    $users = $model->getAllUsers();
+    include '../../views/admin/foglalas.php';
 }
 ?>

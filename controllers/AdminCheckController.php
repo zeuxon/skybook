@@ -1,10 +1,8 @@
 <?php
-require '../config/connection.php';
+require dirname(__DIR__) . '/config/connection.php';
 
-session_start();
-if (!isset($_SESSION['username'])) {
-    header("Location: ../views/login.html");
-    exit();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
 function isAdmin($username) {
@@ -15,9 +13,5 @@ function isAdmin($username) {
     $row = oci_fetch_assoc($stid);
     oci_free_statement($stid);
     return $row && $row['ADMIN'] == 1;
-}
-
-if (!isAdmin($_SESSION['username'])) {
-    die("Access denied. Admins only.");
 }
 ?>

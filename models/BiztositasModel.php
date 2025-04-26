@@ -1,5 +1,5 @@
 <?php
-require '../config/connection.php';
+require '../../config/connection.php';
 
 class BiztositasModel {
     private $conn;
@@ -9,7 +9,8 @@ class BiztositasModel {
     }
 
     public function getAllInsurance() {
-        $query = "SELECT * FROM Biztositas";
+        $query = "SELECT * FROM Biztositas
+                  ORDER BY biztositas_id";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);
         $insurance = [];

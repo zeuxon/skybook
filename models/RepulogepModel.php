@@ -1,5 +1,5 @@
 <?php
-require '../config/connection.php';
+require '../../config/connection.php';
 
 class RepulogepModel {
     private $conn;
@@ -11,7 +11,8 @@ class RepulogepModel {
     public function getAllAircraft() {
         $query = "SELECT r.repulogep_id, r.kapacitas, r.tipus, l.nev AS legitarsasag_nev 
                   FROM Repulogep r 
-                  JOIN Legitarsasag l ON r.legitarsasag_id = l.legitarsasag_id";
+                  JOIN Legitarsasag l ON r.legitarsasag_id = l.legitarsasag_id
+                  ORDER BY r.repulogep_id";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);
         $aircraft = [];

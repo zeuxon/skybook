@@ -6,9 +6,9 @@
     <title>Repülőjárat kezelése</title>
 </head>
 <body>
-    <a href="../index.php">Vissza</a>
+    <a href="../../index.php">Vissza</a>
     <h1>Repülőjárat kezelése</h1>
-    <form method="POST" action="../controllers/RepulojaratController.php">
+    <form method="POST" action="../../controllers/admin/RepulojaratController.php">
         <label for="jaratid">Járat ID (csak módosításhoz/törléshez):</label>
         <input type="number" id="jaratid" name="jaratid"><br>
         <label for="repulogep_type">Repülőgép Típus:</label>

@@ -6,9 +6,9 @@
     <title>Jegykategória kezelése</title>
 </head>
 <body>
-    <a href="../index.php">Vissza</a>
+    <a href="../../index.php">Vissza</a>
     <h1>Jegykategória kezelése</h1>
-    <form method="POST" action="../controllers/JegykategoriaController.php">
+    <form method="POST" action="../../controllers/admin/JegykategoriaController.php">
         <label for="jegykategoria_id">Jegykategória ID (csak módosításhoz/törléshez):</label>
         <input type="number" id="jegykategoria_id" name="jegykategoria_id"><br>
         <label for="nev">Név:</label>

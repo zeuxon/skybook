@@ -1,6 +1,13 @@
 <?php
-require '../models/JegyModel.php';
-require '../config/connection.php';
+require '../../controllers/AdminCheckController.php';
+require '../../models/JegyModel.php';
+require '../../config/connection.php';
+
+if (!isset($_SESSION['username']) || !isAdmin($_SESSION['username'])) {
+    header("HTTP/1.1 403 Forbidden");
+    echo "Ehhez az oldalhoz nincs jogosultsága. <br> <a href='../../index.php'>Vissza a főoldalra</a>";
+    exit();
+}
 
 $model = new JegyModel($conn);
 
@@ -25,8 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($success) {
-        // Redirect to avoid form resubmission
-        header('Location: ../controllers/JegyController.php');
+        header('Location: ../../controllers/admin/JegyController.php');
         exit;
     } else {
         echo "Operation failed.";
@@ -34,11 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $tickets = $model->getAllTickets(); // Fetch all tickets
-    $bookings = $model->getAllBookingsForDropdown(); // Fetch bookings for dropdown
-    $flights = $model->getAllFlightsForDropdown(); // Fetch flights for dropdown
-    $categories = $model->getAllJegykategoriaForDropdown(); // Fetch jegykategoria for dropdown
-    $legitarsasagok = $model->getAllLegitarsasagForDropdown(); // Fetch legitarsasag for dropdown
-    include '../views/jegy.php'; // Pass data to the view
+    $tickets = $model->getAllTickets();
+    $bookings = $model->getAllBookingsForDropdown();
+    $flights = $model->getAllFlightsForDropdown();
+    $categories = $model->getAllJegykategoriaForDropdown();
+    $legitarsasagok = $model->getAllLegitarsasagForDropdown();
+    include '../../views/admin/jegy.php';
 }
 ?>

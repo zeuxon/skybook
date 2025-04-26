@@ -6,9 +6,9 @@
     <title>Biztosítás kezelése</title>
 </head>
 <body>
-    <a href="../index.php">Vissza</a>
+    <a href="../../index.php">Vissza</a>
     <h1>Biztosítás kezelése</h1>
-    <form method="POST" action="../controllers/BiztositasController.php">
+    <form method="POST" action="../../controllers/admin/BiztositasController.php">
         <label for="biztositas_id">Biztosítás ID (csak módosításhoz/törléshez):</label>
         <input type="number" id="biztositas_id" name="biztositas_id"><br>
         <label for="nev">Név:</label>

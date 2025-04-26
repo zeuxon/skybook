@@ -6,9 +6,9 @@
     <title>Jegy kezelése</title>
 </head>
 <body>
-    <a href="../index.php">Vissza</a>
+    <a href="../../index.php">Vissza</a>
     <h1>Jegy kezelése</h1>
-    <form method="POST" action="../controllers/JegyController.php">
+    <form method="POST" action="../../controllers/admin/JegyController.php">
         <label for="jegy_id">Jegy ID (csak módosításhoz/törléshez):</label>
         <input type="number" id="jegy_id" name="jegy_id"><br>
 

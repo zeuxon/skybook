@@ -1,5 +1,5 @@
 <?php
-require '../config/connection.php';
+require '../../config/connection.php';
 
 class RepulojaratModel {
     private $conn;
@@ -17,7 +17,8 @@ class RepulojaratModel {
                   JOIN Repulogep g ON r.repulogep_id = g.repulogep_id
                   JOIN Ut u ON r.ut_id = u.ut_id
                   JOIN Repuloter ir ON u.indulasi_repuloter_id = ir.repuloter_id
-                  JOIN Repuloter er ON u.erkezesi_repuloter_id = er.repuloter_id";
+                  JOIN Repuloter er ON u.erkezesi_repuloter_id = er.repuloter_id
+                  ORDER BY r.jaratid";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);
         $flights = [];

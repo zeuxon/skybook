@@ -1,5 +1,5 @@
 <?php
-require '../config/connection.php';
+require '../../config/connection.php';
 
 class LegitarsagModel {
     private $conn;
@@ -9,7 +9,8 @@ class LegitarsagModel {
     }
 
     public function getAllAirlines() {
-        $query = "SELECT * FROM Legitarsasag";
+        $query = "SELECT * FROM Legitarsasag
+                  ORDER BY legitarsasag_id";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);
         $airlines = [];

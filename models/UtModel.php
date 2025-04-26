@@ -1,5 +1,5 @@
 <?php
-require '../config/connection.php';
+require '../../config/connection.php';
 
 class UtModel {
     private $conn;
@@ -17,6 +17,7 @@ class UtModel {
             FROM Ut u
             JOIN Repuloter r1 ON u.indulasi_repuloter_id = r1.repuloter_id
             JOIN Repuloter r2 ON u.erkezesi_repuloter_id = r2.repuloter_id
+            ORDER BY u.ut_id
         ";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);

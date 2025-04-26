@@ -6,9 +6,9 @@
     <title>Repülőtér kezelése</title>
 </head>
 <body>
-    <a href="../index.php">Vissza</a>
+    <a href="../../index.php">Vissza</a>
     <h1>Repülőtér kezelése</h1>
-    <form method="POST" action="../controllers/RepuloterController.php">
+    <form method="POST" action="../../controllers/admin/RepuloterController.php">
         <label for="repuloter_id">Repülőtér ID (csak módosításhoz/törléshez):</label>
         <input type="number" id="repuloter_id" name="repuloter_id"><br>
         <label for="nev">Név:</label>

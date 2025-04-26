@@ -6,9 +6,9 @@
     <title>Légitársaság kezelése</title>
 </head>
 <body>
-    <a href="../index.php">Vissza</a>
+    <a href="../../index.php">Vissza</a>
     <h1>Légitársaság kezelése</h1>
-    <form method="POST" action="../controllers/LegitarsasagController.php">
+    <form method="POST" action="../../controllers/admin/LegitarsasagController.php">
         <label for="legitarsasag_id">Légitársaság ID (csak módosításhoz/törléshez):</label>
         <input type="number" id="legitarsasag_id" name="legitarsasag_id"><br>
         <label for="nev">Név:</label>

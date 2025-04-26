@@ -1,5 +1,5 @@
 <?php
-require '../config/connection.php';
+require '../../config/connection.php';
 
 class RepuloterModel {
     private $conn;
@@ -9,7 +9,9 @@ class RepuloterModel {
     }
 
     public function getAllAirports() {
-        $stid = oci_parse($this->conn, "SELECT * FROM Repuloter");
+        $stid = oci_parse($this->conn, 
+        "SELECT * FROM Repuloter
+                   ORDER BY repuloter_id");
         oci_execute($stid);
         $airports = [];
         while ($row = oci_fetch_assoc($stid)) {

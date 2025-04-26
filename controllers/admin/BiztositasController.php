@@ -1,6 +1,13 @@
 <?php
-require '../models/BiztositasModel.php';
-require '../config/connection.php';
+require '../../controllers/AdminCheckController.php';
+require '../../models/BiztositasModel.php';
+require '../../config/connection.php';
+
+if (!isset($_SESSION['username']) || !isAdmin($_SESSION['username'])) {
+    header("HTTP/1.1 403 Forbidden");
+    echo "Ehhez az oldalhoz nincs jogosultsága. <br> <a href='../../index.php'>Vissza a főoldalra</a>";
+    exit();
+}
 
 $model = new BiztositasModel($conn);
 
@@ -19,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($success) {
-        header('Location: ../controllers/BiztositasController.php');
+        header('Location: ../../controllers/admin/BiztositasController.php');
     } else {
         echo "Operation failed.";
     }
@@ -27,6 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $insurance = $model->getAllInsurance();
-    include '../views/biztositas.php';
+    include '../../views/admin/biztositas.php';
 }
 ?>

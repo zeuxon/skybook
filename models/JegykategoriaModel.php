@@ -1,5 +1,5 @@
 <?php
-require '../config/connection.php';
+require '../../config/connection.php';
 
 class JegykategoriaModel {
     private $conn;
@@ -9,7 +9,8 @@ class JegykategoriaModel {
     }
 
     public function getAllCategories() {
-        $query = "SELECT * FROM Jegykategoria";
+        $query = "SELECT * FROM Jegykategoria
+                  ORDER BY jegykategoria_id";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);
         $categories = [];

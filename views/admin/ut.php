@@ -6,9 +6,9 @@
     <title>Útvonalak kezelése</title>
 </head>
 <body>
-    <a href="../index.php">Vissza</a>
+    <a href="../../index.php">Vissza</a>
     <h1>Útvonalak kezelése</h1>
-    <form method="POST" action="../controllers/UtController.php">
+    <form method="POST" action="../../controllers/admin/UtController.php">
         <label for="ut_id">Út ID (csak módosításhoz/törléshez):</label>
         <input type="number" id="ut_id" name="ut_id"><br>
 

@@ -6,9 +6,9 @@
     <title>Foglalás kezelése</title>
 </head>
 <body>
-    <a href="../index.php">Vissza</a>
+    <a href="../../index.php">Vissza</a>
     <h1>Foglalás kezelése</h1>
-    <form method="POST" action="../controllers/FoglalasController.php">
+    <form method="POST" action="../../controllers/admin/FoglalasController.php">
         <label for="foglalas_id">Foglalás ID (csak módosításhoz/törléshez):</label>
         <input type="number" id="foglalas_id" name="foglalas_id"><br>
         

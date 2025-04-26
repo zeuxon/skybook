@@ -6,9 +6,9 @@
     <title>Repülőgép kezelése</title>
 </head>
 <body>
-    <a href="../index.php">Vissza</a>
+    <a href="../../index.php">Vissza</a>
     <h1>Repülőgép kezelése</h1>
-    <form method="POST" action="../controllers/RepulogepController.php">
+    <form method="POST" action="../../controllers/admin/RepulogepController.php">
         <label for="repulogep_id">Repülőgép ID (csak módosításhoz/törléshez):</label>
         <input type="number" id="repulogep_id" name="repulogep_id"><br>
         <label for="legitarsasag_name">Légitársaság:</label>

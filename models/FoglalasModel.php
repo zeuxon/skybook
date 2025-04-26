@@ -1,5 +1,5 @@
 <?php
-require '../config/connection.php';
+require '../../config/connection.php';
 
 class FoglalasModel {
     private $conn;
@@ -12,7 +12,8 @@ class FoglalasModel {
         $query = "SELECT f.foglalas_id, f.datum, f.statusz, 
                          fel.nev AS felhasznalo_nev 
                   FROM Foglalas f
-                  JOIN Felhasznalo fel ON f.felhasznalo_id = fel.felhasznalo_id";
+                  JOIN Felhasznalo fel ON f.felhasznalo_id = fel.felhasznalo_id
+                  ORDER BY f.foglalas_id";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);
         $bookings = [];
