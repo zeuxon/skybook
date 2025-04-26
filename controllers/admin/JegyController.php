@@ -14,19 +14,14 @@ $model = new JegyModel($conn);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'];
     $id = $_POST['jegy_id'] ?? null;
-    $foglalas_id = $_POST['foglalas_id'];
     $jarat_id = $_POST['jarat_id'];
     $jegykategoria_id = $_POST['jegykategoria_id'];
     $ar = $_POST['ar'];
 
-    // Fetch the Foglalás date from the database
-    $foglalas = $model->getBookingById($foglalas_id);
-    $foglalas_datum = $foglalas['DATUM'];
-
     if ($action === 'add') {
-        $success = $model->createTicket($foglalas_id, $jarat_id, $jegykategoria_id, $ar);
+        $success = $model->createTicket($jarat_id, $jegykategoria_id, $ar);
     } elseif ($action === 'edit' && $id) {
-        $success = $model->updateTicket($id, $foglalas_id, $jarat_id, $jegykategoria_id, $ar);
+        $success = $model->updateTicket($id, $jarat_id, $jegykategoria_id, $ar);
     } elseif ($action === 'delete' && $id) {
         $success = $model->deleteTicket($id);
     }
@@ -41,10 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $tickets = $model->getAllTickets();
-    $bookings = $model->getAllBookingsForDropdown();
     $flights = $model->getAllFlightsForDropdown();
     $categories = $model->getAllJegykategoriaForDropdown();
-    $legitarsasagok = $model->getAllLegitarsasagForDropdown();
     include '../../views/admin/jegy.php';
 }
 ?>

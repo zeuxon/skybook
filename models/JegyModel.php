@@ -21,10 +21,11 @@ class JegyModel {
                          ir.nev AS indulasi_repuloter_nev, 
                          er.nev AS erkezesi_repuloter_nev, 
                          jk.nev AS jegykategoria_nev, 
-                         j.ar
+                         j.ar,
+                         j.foglalva
                   FROM Jegy j
-                  JOIN Foglalas f ON j.foglalas_id = f.foglalas_id
-                  JOIN Felhasznalo fel ON f.felhasznalo_id = fel.felhasznalo_id
+                  LEFT JOIN Foglalas f ON f.jegy_id = j.jegy_id
+                  LEFT JOIN Felhasznalo fel ON f.felhasznalo_id = fel.felhasznalo_id
                   JOIN Repulojarat r ON j.jarat_id = r.jaratid
                   JOIN Repulogep rg ON r.repulogep_id = rg.repulogep_id
                   JOIN Legitarsasag lg ON rg.legitarsasag_id = lg.legitarsasag_id
@@ -106,18 +107,6 @@ class JegyModel {
         return $categories;
     }
 
-    public function getAllLegitarsasagForDropdown() {
-        $query = "SELECT legitarsasag_id, nev FROM Legitarsasag";
-        $stid = oci_parse($this->conn, $query);
-        oci_execute($stid);
-        $legitarsasagok = [];
-        while ($row = oci_fetch_assoc($stid)) {
-            $legitarsasagok[] = $row;
-        }
-        oci_free_statement($stid);
-        return $legitarsasagok;
-    }
-
     public function getBookingById($foglalas_id) {
         $query = "SELECT TO_CHAR(datum, 'YYYY.MM.DD') AS datum FROM Foglalas WHERE foglalas_id = :foglalas_id";
         $stid = oci_parse($this->conn, $query);
@@ -128,19 +117,16 @@ class JegyModel {
         return $row;
     }
 
-    public function createTicket($foglalas_id, $jarat_id, $jegykategoria_id, $ar) {
-        // Get the next ID for the ticket
+    public function createTicket($jarat_id, $jegykategoria_id, $ar) {
         $stid = oci_parse($this->conn, "SELECT NVL(MAX(jegy_id), 0) + 1 AS next_id FROM Jegy");
         oci_execute($stid);
         $row = oci_fetch_assoc($stid);
         $nextId = $row['NEXT_ID'];
         oci_free_statement($stid);
     
-        // Insert the new ticket
-        $stid = oci_parse($this->conn, "INSERT INTO Jegy (jegy_id, foglalas_id, jarat_id, jegykategoria_id, ar) 
-                                        VALUES (:id, :foglalas_id, :jarat_id, :jegykategoria_id, :ar)");
+        $stid = oci_parse($this->conn, "INSERT INTO Jegy (jegy_id, jarat_id, jegykategoria_id, ar, foglalva) 
+                                        VALUES (:id, :jarat_id, :jegykategoria_id, :ar, 0)");
         oci_bind_by_name($stid, ':id', $nextId);
-        oci_bind_by_name($stid, ':foglalas_id', $foglalas_id);
         oci_bind_by_name($stid, ':jarat_id', $jarat_id);
         oci_bind_by_name($stid, ':jegykategoria_id', $jegykategoria_id);
         oci_bind_by_name($stid, ':ar', $ar);
@@ -148,15 +134,13 @@ class JegyModel {
         return oci_execute($stid);
     }
 
-    public function updateTicket($id, $foglalas_id, $jarat_id, $jegykategoria_id, $ar) {
+    public function updateTicket($id, $jarat_id, $jegykategoria_id, $ar) {
         $stid = oci_parse($this->conn, "UPDATE Jegy 
-                                        SET foglalas_id = :foglalas_id, 
-                                            jarat_id = :jarat_id, 
+                                        SET jarat_id = :jarat_id, 
                                             jegykategoria_id = :jegykategoria_id, 
                                             ar = :ar 
                                         WHERE jegy_id = :id");
         oci_bind_by_name($stid, ':id', $id);
-        oci_bind_by_name($stid, ':foglalas_id', $foglalas_id);
         oci_bind_by_name($stid, ':jarat_id', $jarat_id);
         oci_bind_by_name($stid, ':jegykategoria_id', $jegykategoria_id);
         oci_bind_by_name($stid, ':ar', $ar);

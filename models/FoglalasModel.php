@@ -9,13 +9,20 @@ class FoglalasModel {
     }
 
     public function getAllBookings() {
-        $query = "SELECT f.foglalas_id, f.datum, f.statusz, 
-                         fel.nev AS felhasznalo_nev 
+        $query = "SELECT f.foglalas_id, 
+                         fel.nev AS felhasznalo_nev, 
+                         TO_CHAR(f.datum, 'YYYY.MM.DD') AS datum, 
+                         f.statusz, 
+                         jk.nev AS jegykategoria_nev, 
+                         j.ar AS jegy_ar
                   FROM Foglalas f
                   JOIN Felhasznalo fel ON f.felhasznalo_id = fel.felhasznalo_id
+                  JOIN Jegy j ON f.jegy_id = j.jegy_id
+                  JOIN Jegykategoria jk ON j.jegykategoria_id = jk.jegykategoria_id
                   ORDER BY f.foglalas_id";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);
+    
         $bookings = [];
         while ($row = oci_fetch_assoc($stid)) {
             $bookings[] = $row;

@@ -11,14 +11,44 @@ class RepulojaratModel {
     public function getAllFlights() {
         $query = "SELECT r.jaratid, r.indulasi_ido, r.erkezesi_ido, 
                          g.tipus AS repulogep_tipus, 
+                         lg.nev AS legitarsasag_nev, 
                          ir.nev AS indulasi_repuloter_nev, 
                          er.nev AS erkezesi_repuloter_nev
                   FROM Repulojarat r
                   JOIN Repulogep g ON r.repulogep_id = g.repulogep_id
+                  JOIN Legitarsasag lg ON g.legitarsasag_id = lg.legitarsasag_id
                   JOIN Ut u ON r.ut_id = u.ut_id
                   JOIN Repuloter ir ON u.indulasi_repuloter_id = ir.repuloter_id
                   JOIN Repuloter er ON u.erkezesi_repuloter_id = er.repuloter_id
                   ORDER BY r.jaratid";
+        $stid = oci_parse($this->conn, $query);
+        oci_execute($stid);
+        $flights = [];
+        while ($row = oci_fetch_assoc($stid)) {
+            $flights[] = $row;
+        }
+        oci_free_statement($stid);
+        return $flights;
+    }
+
+    public function getAllFlightsWithTickets() {
+        $query = "SELECT r.jaratid, r.indulasi_ido, r.erkezesi_ido, 
+                         g.tipus AS repulogep_tipus, 
+                         lg.nev AS legitarsasag_nev, 
+                         ir.nev AS indulasi_repuloter_nev, 
+                         er.nev AS erkezesi_repuloter_nev,
+                         j.jegy_id, 
+                         jk.nev AS jegykategoria_nev, 
+                         j.ar AS jegy_ar
+                  FROM Repulojarat r
+                  JOIN Repulogep g ON r.repulogep_id = g.repulogep_id
+                  JOIN Legitarsasag lg ON g.legitarsasag_id = lg.legitarsasag_id
+                  JOIN Ut u ON r.ut_id = u.ut_id
+                  JOIN Repuloter ir ON u.indulasi_repuloter_id = ir.repuloter_id
+                  JOIN Repuloter er ON u.erkezesi_repuloter_id = er.repuloter_id
+                  LEFT JOIN Jegy j ON j.jarat_id = r.jaratid AND j.foglalva = 0
+                  LEFT JOIN Jegykategoria jk ON j.jegykategoria_id = jk.jegykategoria_id
+                  ORDER BY r.jaratid, j.jegy_id";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);
         $flights = [];
@@ -57,16 +87,14 @@ class RepulojaratModel {
     }
     
     public function getUtIdByRoute($from, $to) {
-        // Convert airport names to their IDs
         $indulasi_repuloter_id = $this->getRepuloterIdByName($from);
         $erkezesi_repuloter_id = $this->getRepuloterIdByName($to);
         echo $indulasi_repuloter_id . " - " . $erkezesi_repuloter_id . "<br>";
     
         if (!$indulasi_repuloter_id || !$erkezesi_repuloter_id) {
-            return null; // Return null if either airport ID is not found
+            return null;
         }
     
-        // Query the Ut table using the airport IDs
         $stid = oci_parse($this->conn, "SELECT ut_id FROM Ut 
                                         WHERE indulasi_repuloter_id = :indulasi_id
                                         AND erkezesi_repuloter_id = :erkezesi_id");

@@ -1,6 +1,7 @@
 <?php
 require '../../controllers/AdminCheckController.php';
 require '../../models/FoglalasModel.php';
+require '../../models/JegyModel.php';
 require '../../config/connection.php';
 
 if (!isset($_SESSION['username']) || !isAdmin($_SESSION['username'])) {
@@ -9,21 +10,23 @@ if (!isset($_SESSION['username']) || !isAdmin($_SESSION['username'])) {
     exit();
 }
 
-$model = new FoglalasModel($conn);
+$foglalasModel = new FoglalasModel($conn);
+$jegyModel = new JegyModel($conn);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'];
     $id = $_POST['foglalas_id'] ?? null;
     $felhasznalo_id = $_POST['felhasznalo_id'];
+    $jegy_id = $_POST['jegy_id'];
     $datum = $_POST['datum'];
     $statusz = htmlspecialchars($_POST['statusz']);
 
     if ($action === 'add') {
-        $success = $model->createBooking($felhasznalo_id, $datum, $statusz);
+        $success = $foglalasModel->createBooking($felhasznalo_id, $datum, $statusz);
     } elseif ($action === 'edit' && $id) {
-        $success = $model->updateBooking($id, $felhasznalo_id, $datum, $statusz);
+        $success = $foglalasModel->updateBooking($id, $felhasznalo_id, $datum, $statusz);
     } elseif ($action === 'delete' && $id) {
-        $success = $model->deleteBooking($id);
+        $success = $foglalasModel->deleteBooking($id);
     }
 
     if ($success) {
@@ -34,8 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $bookings = $model->getAllBookings();
-    $users = $model->getAllUsers();
+    $bookings = $foglalasModel->getAllBookings();
+    $users = $foglalasModel->getAllUsers();
+    $tickets = $jegyModel->getAllTickets();
     include '../../views/admin/foglalas.php';
 }
 ?>

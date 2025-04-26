@@ -57,14 +57,6 @@ CREATE TABLE Pontgyujtes (
     FOREIGN KEY (felhasznalo_id) REFERENCES Felhasznalo(felhasznalo_id) ON DELETE CASCADE
 );
 
-CREATE TABLE Foglalas (
-    foglalas_id NUMBER(5) PRIMARY KEY,
-    felhasznalo_id NUMBER(5) NOT NULL,
-    datum DATE NOT NULL,
-    statusz VARCHAR(50) NOT NULL,
-    FOREIGN KEY (felhasznalo_id) REFERENCES Felhasznalo(felhasznalo_id) ON DELETE CASCADE
-);
-
 CREATE TABLE Biztositas (
     biztositas_id NUMBER(5) PRIMARY KEY,
     nev VARCHAR(100) NOT NULL,
@@ -79,13 +71,22 @@ CREATE TABLE Jegykategoria (
 
 CREATE TABLE Jegy (
     jegy_id NUMBER(5) PRIMARY KEY,
-    foglalas_id NUMBER(5) NOT NULL,
     jarat_id NUMBER(5) NOT NULL,
     jegykategoria_id NUMBER(5) NOT NULL,
     ar NUMBER(10) NOT NULL,
-    FOREIGN KEY (foglalas_id) REFERENCES Foglalas(foglalas_id) ON DELETE CASCADE,
+    foglalva NUMBER(1) DEFAULT 0,
     FOREIGN KEY (jarat_id) REFERENCES Repulojarat(jaratid) ON DELETE CASCADE,
     FOREIGN KEY (jegykategoria_id) REFERENCES Jegykategoria(jegykategoria_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Foglalas (
+    foglalas_id NUMBER(5) PRIMARY KEY,
+    felhasznalo_id NUMBER(5) NOT NULL,
+    jegy_id NUMBER(5) NOT NULL,
+    datum DATE NOT NULL,
+    statusz VARCHAR(50) NOT NULL,
+    FOREIGN KEY (felhasznalo_id) REFERENCES Felhasznalo(felhasznalo_id) ON DELETE CASCADE,
+    FOREIGN KEY (jegy_id) REFERENCES Jegy(jegy_id) ON DELETE CASCADE
 );
 
 INSERT INTO Repuloter VALUES (1, 'Liszt Ferenc Nemzetközi Repülőtér', 'Budapest', 'Magyarország');
@@ -130,12 +131,6 @@ INSERT INTO Pontgyujtes VALUES (3, 3, 750);
 INSERT INTO Pontgyujtes VALUES (4, 4, 300);
 INSERT INTO Pontgyujtes VALUES (5, 5, 1200);
 
-INSERT INTO Foglalas VALUES (1, 1, DATE '2025-03-20', 'Fizetett');
-INSERT INTO Foglalas VALUES (2, 2, DATE '2025-03-21', 'Fizetett');
-INSERT INTO Foglalas VALUES (3, 3, DATE '2025-03-22', 'Függőben');
-INSERT INTO Foglalas VALUES (4, 4, DATE '2025-03-23', 'Fizetett');
-INSERT INTO Foglalas VALUES (5, 5, DATE '2025-03-24', 'Törölve');
-
 INSERT INTO Biztositas VALUES (1, 'Alap biztosítás', 5000);
 INSERT INTO Biztositas VALUES (2, 'Utazási biztosítás', 10000);
 INSERT INTO Biztositas VALUES (3, 'Prémium biztosítás', 15000);
@@ -148,8 +143,14 @@ INSERT INTO Jegykategoria VALUES (3, 'Business', 20);
 INSERT INTO Jegykategoria VALUES (4, 'First Class', 30);
 INSERT INTO Jegykategoria VALUES (5, 'Diák kedvezmény', 15);
 
-INSERT INTO Jegy VALUES (1, 1, 1, 1, 20000);
-INSERT INTO Jegy VALUES (2, 2, 2, 2, 30000);
-INSERT INTO Jegy VALUES (3, 3, 3, 3, 50000);
-INSERT INTO Jegy VALUES (4, 4, 4, 4, 70000);
-INSERT INTO Jegy VALUES (5, 5, 5, 5, 15000);
+INSERT INTO Jegy VALUES (1, 1, 1, 20000, 0);
+INSERT INTO Jegy VALUES (2, 2, 2, 30000, 0);
+INSERT INTO Jegy VALUES (3, 3, 3, 50000, 0);
+INSERT INTO Jegy VALUES (4, 4, 4, 70000, 0);
+INSERT INTO Jegy VALUES (5, 5, 5, 15000, 0);
+
+INSERT INTO Foglalas VALUES (1, 1, 1, DATE '2025-03-20', 'Fizetett');
+INSERT INTO Foglalas VALUES (2, 2, 2, DATE '2025-03-21', 'Fizetett');
+INSERT INTO Foglalas VALUES (3, 3, 3, DATE '2025-03-22', 'Függőben');
+INSERT INTO Foglalas VALUES (4, 4, 4, DATE '2025-03-23', 'Fizetett');
+INSERT INTO Foglalas VALUES (5, 5, 5, DATE '2025-03-24', 'Törölve');

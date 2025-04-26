@@ -2,12 +2,11 @@
 session_start();
 require 'controllers/AdminCheckController.php';
 
-if (!isset($_SESSION['username'])) {
-    header("Location: views/login.html");
-    exit();
+if (isset($_SESSION['username'])) {
+    $isAdmin = isAdmin($_SESSION['username']);
+
 }
 
-$isAdmin = isAdmin($_SESSION['username']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,15 +14,30 @@ $isAdmin = isAdmin($_SESSION['username']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kezdőlap</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <?php if (isset($_GET['success'])): ?>
+        <?php if ($_GET['success'] === 'login'): ?>
+            <p style="color: green;">Sikeres bejelentkezés!</p>
+        <?php elseif ($_GET['success'] === 'register'): ?>
+            <p style="color: green;">Sikeres regisztráció!</p>
+        <?php endif; ?>
+    <?php endif; ?>
     <h1>
-        Üdvözöljük a rendszerben!
-        <?php echo htmlspecialchars($_SESSION['username']); ?>!
+        Üdvözöljük a rendszerben,
+        <?php 
+            if (isset($_SESSION['username'])) {
+                echo htmlspecialchars($_SESSION['username']);
+            } else {
+                echo "Vendég";
+            }
+        ?>!
     </h1>
     <nav>
         <ul>
-            <?php if ($isAdmin): ?>
+            <?php if (isset($_SESSION['username'])): ?>
+                <?php if ($isAdmin): ?>
                 <li><a href="controllers/admin/RepuloterController.php">Repülőtér kezelése</a></li>
                 <li><a href="controllers/admin/UtController.php">Útvonalak kezelése</a></li>
                 <li><a href="controllers/admin/LegitarsasagController.php">Légitársaság kezelése</a></li>
@@ -33,8 +47,15 @@ $isAdmin = isAdmin($_SESSION['username']);
                 <li><a href="controllers/admin/BiztositasController.php">Biztosítás kezelése</a></li>
                 <li><a href="controllers/admin/JegykategoriaController.php">Jegykategória kezelése</a></li>
                 <li><a href="controllers/admin/JegyController.php">Jegy kezelése</a></li>
+                <?php endif; ?>
+                <li><a href="controllers/user/RepulojaratUserController.php">Repülőjáratok megtekintése</a></li>
+                <li><a href="controllers/user/BookingController.php">Foglalásaim</a></li>
+                <li><a href="controllers/user/UserProfileController.php">Profilom</a></li>
+                <li><a href="controllers/LogoutController.php">Kijelentkezés</a></li>
+            <?php else: ?>
+                <li><a href="views/login.html">Bejelentkezés</a></li>
+                <li><a href="views/register.html">Regisztráció</a></li>
             <?php endif; ?>
-            <li><a href="controllers/LogoutController.php">Kijelentkezés</a></li>
         </ul>
     </nav>
 </body>

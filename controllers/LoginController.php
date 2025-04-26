@@ -1,5 +1,5 @@
 <?php
-require '../config/connection.php';
+$conn = Database::getInstance();
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $row = oci_fetch_assoc($stid);
     if ($row && password_verify($password, $row['JELSZO'])) {
         $_SESSION['username'] = $username;
-        header("Location: ../index.php");
+        header("Location: ../index.php?success=login");
         exit();
     } else {
         echo "Invalid username or password.";

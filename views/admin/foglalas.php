@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foglalás kezelése</title>
+    <link rel="stylesheet" href="../../css/styles.css">
 </head>
 <body>
     <a href="../../index.php">Vissza</a>
@@ -21,6 +22,15 @@
             <?php endforeach; ?>
         </select><br>
         
+        <label for="jegy_id">Jegy:</label>
+        <select id="jegy_id" name="jegy_id" required>
+            <?php foreach ($tickets as $ticket): ?>
+                <option value="<?= htmlspecialchars($ticket['JEGY_ID']) ?>">
+                    <?= htmlspecialchars($ticket['JEGYKATEGORIA_NEV']) ?> - <?= htmlspecialchars($ticket['AR']) ?> Ft
+                </option>
+            <?php endforeach; ?>
+        </select><br>
+        
         <label for="datum">Dátum:</label>
         <input type="date" id="datum" name="datum" required><br>
         
@@ -28,8 +38,8 @@
         <select id="statusz" name="statusz" required>
             <option value="Fizetett">Fizetett</option>
             <option value="Fizetetlen">Fizetetlen</option>
-            <option value="Fuggoben">Függőben</option>
-            <option value="Torolve">Törölve</option>
+            <option value="Függőben">Függőben</option>
+            <option value="Törölve">Törölve</option>
         </select><br>
         
         <button type="submit" name="action" value="add">Hozzáadás</button>
@@ -43,6 +53,7 @@
             <tr>
                 <th>ID</th>
                 <th>Felhasználó</th>
+                <th>Jegy</th>
                 <th>Dátum</th>
                 <th>Státusz</th>
             </tr>
@@ -52,6 +63,7 @@
                 <tr>
                     <td><?= htmlspecialchars($booking['FOGLALAS_ID']) ?></td>
                     <td><?= htmlspecialchars($booking['FELHASZNALO_NEV']) ?></td>
+                    <td><?= htmlspecialchars($booking['JEGYKATEGORIA_NEV']) ?> - <?= htmlspecialchars($booking['JEGY_AR']) ?> Ft</td>
                     <td><?= htmlspecialchars($booking['DATUM']) ?></td>
                     <td><?= htmlspecialchars($booking['STATUSZ']) ?></td>
                 </tr>
