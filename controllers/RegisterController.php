@@ -1,5 +1,5 @@
 <?php
-$conn = Database::getInstance();
+require '../config/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     $username = htmlspecialchars($_POST['username']);
