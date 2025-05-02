@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     } else {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-        // Generate a unique numeric ID for felhasznalo_id
         $query = oci_parse($conn, "SELECT NVL(MAX(felhasznalo_id), 0) + 1 AS new_id FROM Felhasznalo");
         oci_execute($query);
         $row = oci_fetch_assoc($query);
