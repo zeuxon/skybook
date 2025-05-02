@@ -15,7 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     } else {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-        $stid = oci_parse($conn, "INSERT INTO Felhasznalo (felhasznalo_id, nev, admin, jelszo, felhasznalonev, email, telefonszam, iranyitoszam, telepules) VALUES (FELHASZNALO_SEQ.NEXTVAL, :name, 0, :password, :username, :email, :telephone, :postalCode, :city)");
+        // Generate a unique numeric ID for felhasznalo_id
+        $query = oci_parse($conn, "SELECT NVL(MAX(felhasznalo_id), 0) + 1 AS new_id FROM Felhasznalo");
+        oci_execute($query);
+        $row = oci_fetch_assoc($query);
+        $felhasznaloId = $row['NEW_ID'];
+        oci_free_statement($query);
+
+        $stid = oci_parse($conn, "INSERT INTO Felhasznalo (felhasznalo_id, nev, admin, jelszo, felhasznalonev, email, telefonszam, iranyitoszam, telepules) VALUES (:id, :name, 0, :password, :username, :email, :telephone, :postalCode, :city)");
+        oci_bind_by_name($stid, ':id', $felhasznaloId);
         oci_bind_by_name($stid, ':name', $username);
         oci_bind_by_name($stid, ':password', $hashedPassword);
         oci_bind_by_name($stid, ':username', $username);
