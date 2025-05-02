@@ -1,12 +1,21 @@
 <?php
 session_start();
 require 'controllers/AdminCheckController.php';
+require 'config/connection.php';
 
 if (isset($_SESSION['username'])) {
     $isAdmin = isAdmin($_SESSION['username']);
-
 }
 
+$query = oci_parse($conn, "SELECT repuloter_id, nev FROM Repuloter ORDER BY nev");
+oci_execute($query);
+
+$airports = [];
+while ($row = oci_fetch_assoc($query)) {
+    $airports[] = $row;
+}
+oci_free_statement($query);
+oci_close($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,5 +67,25 @@ if (isset($_SESSION['username'])) {
             <?php endif; ?>
         </ul>
     </nav>
+
+    <form method="GET" action="controllers/user/ConnectionController.php">
+        <label for="from_airport">Indulási Repülőtér:</label>
+        <select id="from_airport" name="from_airport" required>
+            <?php foreach ($airports as $airport): ?>
+                <option value="<?= htmlspecialchars($airport['REPULOTER_ID']) ?>">
+                    <?= htmlspecialchars($airport['NEV']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <label for="to_airport">Érkezési Repülőtér:</label>
+        <select id="to_airport" name="to_airport" required>
+            <?php foreach ($airports as $airport): ?>
+                <option value="<?= htmlspecialchars($airport['REPULOTER_ID']) ?>">
+                    <?= htmlspecialchars($airport['NEV']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <button type="submit">Keresés</button>
+    </form>
 </body>
 </html>
