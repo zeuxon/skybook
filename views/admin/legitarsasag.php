@@ -44,5 +44,71 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+    <h1>Éves statisztikák</h1>
+    <?php if (count($yearly_stats) === 0): ?>
+        <p>Nincsenek elérhető éves statisztikák.</p>
+    <?php endif; ?>
+    <table>
+        <thead>
+            <tr>
+                <th>Év</th>
+                <?php foreach ($airlines as $airline): ?>
+                    <th><?= htmlspecialchars($airline['NEV']) ?></th>
+                <?php endforeach; ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $data = [];
+            foreach ($yearly_stats as $stat) {
+                $year = $stat['EV'];
+                $airlineName = $stat['LEGITARSASAG_NEV'];
+                $count = $stat['FOGLALASOK_SZAMA'];
+                $data[$year][$airlineName] = $count;
+            }
+
+            foreach ($data as $year => $data): ?>
+                <tr>
+                    <td><?= htmlspecialchars($year) ?></td>
+                    <?php foreach ($airlines as $airline): ?>
+                        <td><?= htmlspecialchars($data[$airline['NEV']] ?? 0) ?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <h1>Havi statisztikák</h1>
+    <?php if (count($monthly_stats) === 0): ?>
+        <p>Nincsenek elérhető havi statisztikák.</p>
+    <?php endif; ?>
+    <table>
+        <thead>
+            <tr>
+                <th>Hónap</th>
+                <?php foreach ($airlines as $airline): ?>
+                    <th><?= htmlspecialchars($airline['NEV']) ?></th>
+                <?php endforeach; ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $data = [];
+            foreach ($monthly_stats as $stat) {
+                $month = $stat['HONAP'];
+                $airlineName = $stat['LEGITARSASAG_NEV'];
+                $count = $stat['FOGLALASOK_SZAMA'];
+                $data[$month][$airlineName] = $count;
+            }
+
+            foreach ($data as $month => $data): ?>
+                <tr>
+                    <td><?= htmlspecialchars($month) ?></td>
+                    <?php foreach ($airlines as $airline): ?>
+                        <td><?= htmlspecialchars($data[$airline['NEV']] ?? 0) ?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </body>
 </html>

@@ -21,6 +21,50 @@ class LegitarsagModel {
         return $airlines;
     }
 
+    public function getYearlyStats() {
+        $query = "SELECT
+                      l.nev AS legitarsasag_nev,
+                      EXTRACT(YEAR FROM f.datum) AS ev,
+                      COUNT(f.foglalas_id) AS foglalasok_szama
+                  FROM Foglalas f
+                  JOIN Jegy j ON f.jegy_id = j.jegy_id
+                  JOIN Repulojarat r ON j.jarat_id = r.jaratid
+                  JOIN Repulogep g ON r.repulogep_id = g.repulogep_id
+                  JOIN Legitarsasag l ON g.legitarsasag_id = l.legitarsasag_id
+                  GROUP BY l.nev, EXTRACT(YEAR FROM f.datum)
+                  ORDER BY l.nev, ev";
+        $stid = oci_parse($this->conn, $query);
+        oci_execute($stid);
+        $stats = [];
+        while ($row = oci_fetch_assoc($stid)) {
+            $stats[] = $row;
+        }
+        oci_free_statement($stid);
+        return $stats;
+    }
+
+    public function getMonthlyStats() {
+        $query = "SELECT
+                      l.nev AS legitarsasag_nev,
+                      TO_CHAR(f.datum, 'YYYY-MM') AS honap,
+                      COUNT(f.foglalas_id) AS foglalasok_szama
+                  FROM Foglalas f
+                  JOIN Jegy j ON f.jegy_id = j.jegy_id
+                  JOIN Repulojarat r ON j.jarat_id = r.jaratid
+                  JOIN Repulogep g ON r.repulogep_id = g.repulogep_id
+                  JOIN Legitarsasag l ON g.legitarsasag_id = l.legitarsasag_id
+                  GROUP BY l.nev, TO_CHAR(f.datum, 'YYYY-MM')
+                  ORDER BY l.nev, honap";
+        $stid = oci_parse($this->conn, $query);
+        oci_execute($stid);
+        $stats = [];
+        while ($row = oci_fetch_assoc($stid)) {
+            $stats[] = $row;
+        }
+        oci_free_statement($stid);
+        return $stats;
+    }
+
     public function getAirlineById($id) {
         $stid = oci_parse($this->conn, "SELECT * FROM Legitarsasag WHERE legitarsasag_id = :id");
         oci_bind_by_name($stid, ':id', $id);
