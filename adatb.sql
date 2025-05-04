@@ -84,10 +84,15 @@ CREATE TABLE Foglalas (
     felhasznalo_id NUMBER(5) NOT NULL,
     jegy_id NUMBER(5) NOT NULL,
     datum DATE NOT NULL,
-    statusz VARCHAR(50) NOT NULL,
+    statusz VARCHAR(50) NOT NULL,    
     FOREIGN KEY (felhasznalo_id) REFERENCES Felhasznalo(felhasznalo_id) ON DELETE CASCADE,
     FOREIGN KEY (jegy_id) REFERENCES Jegy(jegy_id) ON DELETE CASCADE
 );
+
+CREATE TABLE Jarat_valtozas_log (
+    jaratid NUMBER(5) PRIMARY KEY,
+    jarat_valtozas VARCHAR(4000) DEFAULT 'Nincs változás a lefoglat járatokon!'
+)
 
 INSERT INTO Repuloter VALUES (1, 'Liszt Ferenc Nemzetközi Repülőtér', 'Budapest', 'Magyarország');
 INSERT INTO Repuloter VALUES (2, 'Heathrow', 'London', 'Egyesült Királyság');
