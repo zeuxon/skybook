@@ -67,11 +67,11 @@
                 $data[$year][$airlineName] = $count;
             }
 
-            foreach ($data as $year => $data): ?>
+            foreach ($data as $year => $row): ?>
                 <tr>
                     <td><?= htmlspecialchars($year) ?></td>
                     <?php foreach ($airlines as $airline): ?>
-                        <td><?= htmlspecialchars($data[$airline['NEV']] ?? 0) ?></td>
+                        <td><?= htmlspecialchars($row[$airline['NEV']] ?? 0) ?></td>
                     <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
@@ -100,11 +100,11 @@
                 $data[$month][$airlineName] = $count;
             }
 
-            foreach ($data as $month => $data): ?>
+            foreach ($data as $month => $row): ?>
                 <tr>
                     <td><?= htmlspecialchars($month) ?></td>
                     <?php foreach ($airlines as $airline): ?>
-                        <td><?= htmlspecialchars($data[$airline['NEV']] ?? 0) ?></td>
+                        <td><?= htmlspecialchars($row[$airline['NEV']] ?? 0) ?></td>
                     <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
