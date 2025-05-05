@@ -2,7 +2,7 @@
 require dirname(__DIR__) . '/config/connection.php';
 
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    on_start();
 }
 
 function isAdmin($username) {
