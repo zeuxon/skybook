@@ -35,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $airlines = $model->getAllAirlines();
+    $yearly_stats = $model->getYearlyStats();
+    $monthly_stats = $model->getMonthlyStats();
     include '../../views/admin/legitarsasag.php';
 }
 ?>

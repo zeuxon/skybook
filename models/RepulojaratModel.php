@@ -100,6 +100,30 @@ class RepulojaratModel {
         return $flights;
     }
 
+    public function getPopularFlights() {
+        $query = "SELECT
+                      i.nev AS indulasi_repuloter_nev,
+                      e.nev AS erkezesi_repuloter_nev,
+                      COUNT(f.foglalas_id) AS foglalasok_szama
+                  FROM Foglalas f
+                  JOIN Jegy j ON f.jegy_id = j.jegy_id
+                  JOIN Repulojarat r ON j.jarat_id = r.jaratid
+                  JOIN Ut u ON r.ut_id = u.ut_id
+                  JOIN Repuloter i ON u.indulasi_repuloter_id = i.repuloter_id
+                  JOIN Repuloter e ON u.erkezesi_repuloter_id = e.repuloter_id
+                  GROUP BY i.nev, e.nev, u.indulasi_repuloter_id, u.erkezesi_repuloter_id
+                  ORDER BY foglalasok_szama DESC
+                  FETCH FIRST ROWS WITH TIES";
+        $stid = oci_parse($this->conn, $query);
+        oci_execute($stid);
+        $flights = [];
+        while ($row = oci_fetch_assoc($stid)) {
+            $flights[] = $row;
+        }
+        oci_free_statement($stid);
+        return $flights;
+    }
+
     public function getFlightById($id) {
         $stid = oci_parse($this->conn, "SELECT * FROM Repulojarat WHERE jaratid = :id");
         oci_bind_by_name($stid, ':id', $id);
