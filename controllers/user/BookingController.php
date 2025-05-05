@@ -26,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     session_start();
     $_SESSION['ticket_id'] = $ticket_id;
     header("Location: ../../views/user/hely_valasztas.php");
-    /*
+
+
     $stid = oci_parse($conn, "SELECT foglalva FROM Jegy WHERE jegy_id = :ticket_id");
     oci_bind_by_name($stid, ':ticket_id', $ticket_id);
     oci_execute($stid);
@@ -45,6 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     $datum = date('Y-m-d');
     $statusz = 'Fizetetlen';
+
+
+    list($sor, $oszlop) = explode('_', $_POST['index']);
+
+    echo $sor;
+    echo $oszlop;
 
     $stid = oci_parse($conn, "INSERT INTO Foglalas (foglalas_id, felhasznalo_id, jegy_id, datum, statusz)
                               VALUES (:foglalas_id, :felhasznalo_id, :ticket_id, TO_DATE(:datum, 'YYYY-MM-DD'), :statusz)");
@@ -68,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 
     oci_free_statement($stid);
-    */
+
 
 }
 

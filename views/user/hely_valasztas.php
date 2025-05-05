@@ -45,10 +45,12 @@
 
     <div class="seat_grid">
         <?php
-        if (isset($_POST['index'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' &&  isset($_POST['index'])) {
             $selected = $_POST['index'];
+
+        }else{
+            $selected = null;
         }
-        $selected = '0_0';
         $posNum = 0;
 
         for ($i = 0; $i < 7; $i++) {
@@ -85,6 +87,7 @@
                             echo '<input type="submit" class="szek_grid-item available" value="'. $j . '">';
                         }
                     }
+
                     echo '</form>';
                 }
             }
@@ -93,6 +96,8 @@
 
         ?>
     </div>
+
+
 
 
 </body>
