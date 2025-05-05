@@ -28,7 +28,7 @@
     <tbody>
         <?php 
         $currentFlightId = null;
-        foreach ($flights as $flight): 
+        foreach ($flights as $flight):
             if ($currentFlightId !== $flight['JARATID']): 
                 $currentFlightId = $flight['JARATID'];
         ?>
@@ -88,6 +88,30 @@
                 </td>
             </tr>
             <?php endif; ?>
+        <?php endforeach; ?>
+    </tbody>
+    </table>
+    <h1>Legnépszerűbb járataink</h1>
+    <table>
+    <thead>
+        <tr>
+            <th>Indulási Repülőtér</th>
+            <th>Érkezési Repülőtér</th>
+            <th>Foglalások száma</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (count($popularFlights) === 0) {
+            echo "<tr><td colspan='3'>Nincs egy járat sem</td></tr>";
+        }
+        foreach ($popularFlights as $flight):
+        ?>
+            <tr>
+                <td><?= htmlspecialchars($flight['INDULASI_REPULOTER_NEV']) ?></td>
+                <td><?= htmlspecialchars($flight['ERKEZESI_REPULOTER_NEV']) ?></td>
+                <td><?= htmlspecialchars($flight['FOGLALASOK_SZAMA']) ?></td>
+            </tr>
         <?php endforeach; ?>
     </tbody>
     </table>

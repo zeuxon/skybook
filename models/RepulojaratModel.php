@@ -31,6 +31,47 @@ class RepulojaratModel {
         return $flights;
     }
 
+    public function getConnections($fromAirportId, $toAirportId) {
+        $query = "
+        SELECT
+            r1.jaratid AS first_flight_id,
+            ir1.nev AS first_departure_airport,
+            r1.indulasi_ido AS first_departure_time,
+            r1.erkezesi_ido AS first_arrival_time,
+            er1.nev AS first_arrival_airport,
+            r2.jaratid AS second_flight_id,
+            ir2.nev AS second_departure_airport,
+            r2.indulasi_ido AS second_departure_time,
+            r2.erkezesi_ido AS second_arrival_time,
+            er2.nev AS second_arrival_airport
+        FROM
+            Repulojarat r1
+            JOIN Ut u1 ON r1.ut_id = u1.ut_id
+            JOIN Repuloter ir1 ON u1.indulasi_repuloter_id = ir1.repuloter_id
+            JOIN Repuloter er1 ON u1.erkezesi_repuloter_id = er1.repuloter_id
+            JOIN Repulojarat r2 ON r1.erkezesi_ido <= r2.indulasi_ido
+            JOIN Ut u2 ON r2.ut_id = u2.ut_id
+            JOIN Repuloter ir2 ON u2.indulasi_repuloter_id = ir2.repuloter_id
+            JOIN Repuloter er2 ON u2.erkezesi_repuloter_id = er2.repuloter_id
+        WHERE
+            u1.indulasi_repuloter_id = :fromAirportId
+            AND u2.erkezesi_repuloter_id = :toAirportId
+        ORDER BY
+            r1.indulasi_ido, r2.indulasi_ido";
+    
+        $stid = oci_parse($this->conn, $query);
+        oci_bind_by_name($stid, ':fromAirportId', $fromAirportId);
+        oci_bind_by_name($stid, ':toAirportId', $toAirportId);
+        oci_execute($stid);
+    
+        $connections = [];
+        while ($row = oci_fetch_assoc($stid)) {
+            $connections[] = $row;
+        }
+        oci_free_statement($stid);
+        return $connections;
+    }
+
     public function getAllFlightsWithTickets() {
         $query = "SELECT r.jaratid, r.indulasi_ido, r.erkezesi_ido, 
                          g.tipus AS repulogep_tipus, 
@@ -49,6 +90,30 @@ class RepulojaratModel {
                   LEFT JOIN Jegy j ON j.jarat_id = r.jaratid AND j.foglalva = 0
                   LEFT JOIN Jegykategoria jk ON j.jegykategoria_id = jk.jegykategoria_id
                   ORDER BY r.jaratid, j.jegy_id";
+        $stid = oci_parse($this->conn, $query);
+        oci_execute($stid);
+        $flights = [];
+        while ($row = oci_fetch_assoc($stid)) {
+            $flights[] = $row;
+        }
+        oci_free_statement($stid);
+        return $flights;
+    }
+
+    public function getPopularFlights() {
+        $query = "SELECT
+                      i.nev AS indulasi_repuloter_nev,
+                      e.nev AS erkezesi_repuloter_nev,
+                      COUNT(f.foglalas_id) AS foglalasok_szama
+                  FROM Foglalas f
+                  JOIN Jegy j ON f.jegy_id = j.jegy_id
+                  JOIN Repulojarat r ON j.jarat_id = r.jaratid
+                  JOIN Ut u ON r.ut_id = u.ut_id
+                  JOIN Repuloter i ON u.indulasi_repuloter_id = i.repuloter_id
+                  JOIN Repuloter e ON u.erkezesi_repuloter_id = e.repuloter_id
+                  GROUP BY i.nev, e.nev, u.indulasi_repuloter_id, u.erkezesi_repuloter_id
+                  ORDER BY foglalasok_szama DESC
+                  FETCH FIRST ROWS WITH TIES";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);
         $flights = [];
