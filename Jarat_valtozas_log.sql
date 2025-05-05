@@ -68,3 +68,18 @@ BEGIN
         VALUES (:OLD.jaratid, v_uzenet);
     END IF;
 END;
+/
+
+CREATE OR REPLACE FUNCTION LefoglaltHelyek(jarat_id_in IN NUMBER)
+  RETURN SYS_REFCURSOR
+IS
+  eredmeny SYS_REFCURSOR;
+BEGIN
+  OPEN eredmeny FOR
+    SELECT f.sor, f.oszlop
+    FROM Foglalas f
+    JOIN Jegy j ON f.jegy_id = j.jegy_id
+    WHERE j.jarat_id = jarat_id_in;
+
+  RETURN eredmeny;
+END;

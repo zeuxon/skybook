@@ -30,7 +30,7 @@ oci_close($conn);
         <?php if ($_GET['success'] === 'login'): ?>
             <p style="color: green;">Sikeres bejelentkezés!</p>
             <?php
-                require 'controllers/MessageCheckController.php';
+                require 'controllers/user/MessageCheckController.php';
                 checkMessage($_SESSION['username'])
 
             ?>

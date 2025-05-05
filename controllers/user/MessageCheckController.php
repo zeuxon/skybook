@@ -1,5 +1,5 @@
 <?php
-require dirname(__DIR__) . '/config/connection.php';
+require dirname(__DIR__) . '/../config/connection.php';
 function checkMessage($username)
 {
     global $conn;
