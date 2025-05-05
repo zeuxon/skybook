@@ -52,34 +52,36 @@
                 </td>
                 <td class="ticket-group">
                     <ul>
-                        <?php 
+                    <?php 
 
-                        $ticketGroups = [];
-                        foreach ($flights as $ticket) {
-                            if ($ticket['JARATID'] === $currentFlightId && !empty($ticket['JEGY_ID'])) {
-                                $key = $ticket['JEGYKATEGORIA_NEV'];
-                                if (!isset($ticketGroups[$key])) {
-                                    $ticketGroups[$key] = [
-                                        'count' => 0,
-                                        'price' => $ticket['JEGY_AR'],
-                                        'category' => $ticket['JEGYKATEGORIA_NEV'],
-                                        'ticket_ids' => []
-                                    ];
-                                }
-                                $ticketGroups[$key]['count']++;
-                                $ticketGroups[$key]['ticket_ids'][] = $ticket['JEGY_ID'];
+                    $ticketGroups = [];
+                    foreach ($flights as $ticket) {
+                        if ($ticket['JARATID'] === $currentFlightId && !empty($ticket['JEGY_ID'])) {
+                            $key = $ticket['JEGYKATEGORIA_NEV'];
+                            if (!isset($ticketGroups[$key])) {
+                                $ticketGroups[$key] = [
+                                    'count' => 0,
+                                    'price' => $ticket['JEGY_AR'],
+                                    'category' => $ticket['JEGYKATEGORIA_NEV'],
+                                    'jarat_id' => $ticket['JARATID'],
+                                    'ticket_ids' => []
+                                ];
                             }
+                            $ticketGroups[$key]['count']++;
+                            $ticketGroups[$key]['ticket_ids'][] = $ticket['JEGY_ID'];
                         }
+                    }
 
-                        foreach ($ticketGroups as $group): ?>
-                            <li>
-                                <?= htmlspecialchars($group['count']) ?> db - <?= htmlspecialchars($group['category']) ?> - <?= htmlspecialchars($group['price']) ?> Ft
-                                <form method="POST" action="../../controllers/user/BookingController.php" style="display:inline;">
-                                    <input type="hidden" name="ticket_id" value="<?= htmlspecialchars($group['ticket_ids'][0]) ?>">
-                                    <button type="submit" name="action" value="book">Foglalás</button>
-                                </form>
-                            </li>
-                        <?php endforeach; ?>
+                    foreach ($ticketGroups as $group): ?>
+                        <li>
+                            <?= htmlspecialchars($group['count']) ?> db - <?= htmlspecialchars($group['category']) ?> - <?= htmlspecialchars($group['price']) ?> Ft
+                            <form method="POST" action="../../controllers/user/BookingController.php" style="display:inline;">
+                                <input type="hidden" name="jarat_id" value="<?= htmlspecialchars($group['jarat_id']) ?>">
+                                <input type="hidden" name="jegy_id" value="<?= htmlspecialchars($group['ticket_ids'][0]) ?>">
+                                <button type="submit" name="action" value="book">Foglalás<?php echo $group['ticket_ids'][0]?></button>
+                            </form>
+                        </li>
+                    <?php endforeach; ?>
 
                         <?php if (empty($ticketGroups)): ?>
                             <li>Nincs elérhető jegy</li>

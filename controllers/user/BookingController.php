@@ -22,48 +22,13 @@ if (!$felhasznalo_id) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'book') {
-    $ticket_id = $_POST['ticket_id'];
+    $jarat_id = $_POST['jarat_id'];
+    $jegy_id = $_POST['jegy_id'];
+    session_start();
+    $_SESSION['jarat_id'] = $jarat_id;
+    $_SESSION['jegy_id'] = $jegy_id;
+    header("Location: ../../views/user/hely_valasztas.php");
 
-    $stid = oci_parse($conn, "SELECT foglalva FROM Jegy WHERE jegy_id = :ticket_id");
-    oci_bind_by_name($stid, ':ticket_id', $ticket_id);
-    oci_execute($stid);
-    $row = oci_fetch_assoc($stid);
-    if (!$row || $row['FOGLALVA'] == 1) {
-        echo "Error: Ticket is already booked or does not exist.";
-        exit();
-    }
-    oci_free_statement($stid);
-
-    $stid = oci_parse($conn, "SELECT NVL(MAX(foglalas_id), 0) + 1 AS next_id FROM Foglalas");
-    oci_execute($stid);
-    $row = oci_fetch_assoc($stid);
-    $next_foglalas_id = $row['NEXT_ID'];
-    oci_free_statement($stid);
-
-    $datum = date('Y-m-d');
-    $statusz = 'Fizetetlen';
-
-    $stid = oci_parse($conn, "INSERT INTO Foglalas (foglalas_id, felhasznalo_id, jegy_id, datum, statusz) 
-                              VALUES (:foglalas_id, :felhasznalo_id, :ticket_id, TO_DATE(:datum, 'YYYY-MM-DD'), :statusz)");
-    oci_bind_by_name($stid, ':foglalas_id', $next_foglalas_id);
-    oci_bind_by_name($stid, ':felhasznalo_id', $felhasznalo_id);
-    oci_bind_by_name($stid, ':ticket_id', $ticket_id);
-    oci_bind_by_name($stid, ':datum', $datum);
-    oci_bind_by_name($stid, ':statusz', $statusz);
-
-    if (oci_execute($stid)) {
-        $stid = oci_parse($conn, "UPDATE Jegy SET foglalva = 1 WHERE jegy_id = :ticket_id");
-        oci_bind_by_name($stid, ':ticket_id', $ticket_id);
-        oci_execute($stid);
-
-        header("Location: ../../controllers/user/RepulojaratUserController.php?success=1");
-        exit();
-    } else {
-        $e = oci_error($stid);
-        echo "Error: " . htmlentities($e['message'], ENT_QUOTES);
-    }
-
-    oci_free_statement($stid);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {

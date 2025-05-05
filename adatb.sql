@@ -85,8 +85,15 @@ CREATE TABLE Foglalas (
     jegy_id NUMBER(5) NOT NULL,
     datum DATE NOT NULL,
     statusz VARCHAR(50) NOT NULL,
+    sor NUMBER(5),
+    oszlop NUMBER(5),
     FOREIGN KEY (felhasznalo_id) REFERENCES Felhasznalo(felhasznalo_id) ON DELETE CASCADE,
     FOREIGN KEY (jegy_id) REFERENCES Jegy(jegy_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Jarat_valtozas_log (
+    jaratid NUMBER(5) PRIMARY KEY,
+    jarat_valtozas VARCHAR(4000) DEFAULT 'Nincs változás a lefoglat járatokon!'
 );
 
 INSERT INTO Repuloter VALUES (1, 'Liszt Ferenc Nemzetközi Repülőtér', 'Budapest', 'Magyarország');
@@ -149,8 +156,8 @@ INSERT INTO Jegy VALUES (3, 3, 3, 50000, 0);
 INSERT INTO Jegy VALUES (4, 4, 4, 70000, 0);
 INSERT INTO Jegy VALUES (5, 5, 5, 15000, 0);
 
-INSERT INTO Foglalas VALUES (1, 1, 1, DATE '2025-03-20', 'Fizetett');
-INSERT INTO Foglalas VALUES (2, 2, 2, DATE '2025-03-21', 'Fizetett');
-INSERT INTO Foglalas VALUES (3, 3, 3, DATE '2025-03-22', 'Függőben');
-INSERT INTO Foglalas VALUES (4, 4, 4, DATE '2025-03-23', 'Fizetett');
-INSERT INTO Foglalas VALUES (5, 5, 5, DATE '2025-03-24', 'Törölve');
+INSERT INTO Foglalas VALUES (1, 1, 1, DATE '2025-03-20', 'Fizetett', 1, 1);
+INSERT INTO Foglalas VALUES (2, 2, 2, DATE '2025-03-21', 'Fizetett', 1, 1);
+INSERT INTO Foglalas VALUES (3, 3, 3, DATE '2025-03-22', 'Függőben', 1, 1);
+INSERT INTO Foglalas VALUES (4, 4, 4, DATE '2025-03-23', 'Fizetett', 1, 1);
+INSERT INTO Foglalas VALUES (5, 5, 5, DATE '2025-03-24', 'Törölve', 1, 1);

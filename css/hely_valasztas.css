@@ -1,0 +1,37 @@
+
+.center{
+    text-align: center;
+}
+
+.available{
+    background-color: green;
+}
+
+.unavailable{
+    background-color: red;
+}
+
+.akt{
+    background-color: royalblue;
+}
+
+.seat_grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+    gap: 2px;
+
+}
+
+.seat_grid-item {
+    padding: 10px;
+    text-align: center;
+    color: rgba(190, 190, 190, 1);
+    max-width: 25%;
+}
+
+.seat_grid form, form input{
+    display: grid;
+    margin: 0;
+    padding: 0;
+}

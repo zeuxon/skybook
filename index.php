@@ -29,6 +29,11 @@ oci_close($conn);
     <?php if (isset($_GET['success'])): ?>
         <?php if ($_GET['success'] === 'login'): ?>
             <p style="color: green;">Sikeres bejelentkezés!</p>
+            <?php
+                require 'controllers/user/MessageCheckController.php';
+                checkMessage($_SESSION['username'])
+
+            ?>
         <?php elseif ($_GET['success'] === 'register'): ?>
             <p style="color: green;">Sikeres regisztráció!</p>
         <?php endif; ?>
