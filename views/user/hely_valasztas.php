@@ -29,7 +29,7 @@
 
 
     if (isset($_SESSION['jarat_id'])) {
-        echo "Járat ID: " . $_SESSION['jarat_id'];
+        // echo "Járat ID: " . $_SESSION['jarat_id'];
         $jarat_id = $_SESSION['jarat_id'];
         $sql = 'BEGIN :cursor := LefoglaltHelyek(:jarat_id); END;';
         $stmt = oci_parse($conn, $sql);
@@ -46,7 +46,7 @@
 
         while ($seat_position = oci_fetch_assoc($cursor)) {
             $seat_positions[] = $seat_position;
-            echo "Sor: " . $seat_position['SOR'] . ", Oszlop: " . $seat_position['OSZLOP'] . "<br>";
+            // echo "Sor: " . $seat_position['SOR'] . ", Oszlop: " . $seat_position['OSZLOP'] . "<br>";
         }
 
         $stid = oci_parse($conn, "SELECT biztositas_id, nev, ar FROM Biztositas");
@@ -61,6 +61,8 @@
         oci_close($conn);
     }
     ?>
+
+    <a href="../../controllers/user/RepulojaratUserController.php">Vissza</a>
 
     <form method="POST" action="../../controllers/user/BookingWithSeatController.php">
         <input type="hidden" name="index" id="selectedSeat" value="">

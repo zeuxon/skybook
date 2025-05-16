@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $categories = $model->getAllCategories();
+    $mostUsedCategories = $model->getMostUsedCategories();
     include '../../views/admin/jegykategoria.php';
 }
 ?>

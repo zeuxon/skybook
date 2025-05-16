@@ -40,5 +40,25 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-</body>
+
+        <h1>Leggyakrabban használt jegykategóriák</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Név</th>
+                    <th>Használat (db)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($mostUsedCategories as $cat): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($cat['JEGYKATEGORIA_ID']) ?></td>
+                        <td><?= htmlspecialchars($cat['NEV']) ?></td>
+                        <td><?= htmlspecialchars($cat['DARAB']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </body>
 </html>

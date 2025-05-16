@@ -21,6 +21,22 @@ class JegykategoriaModel {
         return $categories;
     }
 
+    public function getMostUsedCategories() {
+        $query = "SELECT jk.jegykategoria_id, jk.nev, COUNT(j.jegy_id) AS darab
+                FROM Jegykategoria jk
+                JOIN Jegy j ON jk.jegykategoria_id = j.jegykategoria_id
+                GROUP BY jk.jegykategoria_id, jk.nev
+                ORDER BY darab DESC";
+        $stid = oci_parse($this->conn, $query);
+        oci_execute($stid);
+        $result = [];
+        while ($row = oci_fetch_assoc($stid)) {
+            $result[] = $row;
+        }
+        oci_free_statement($stid);
+        return $result;
+    }
+
     public function getCategoryById($id) {
         $stid = oci_parse($this->conn, "SELECT * FROM Jegykategoria WHERE jegykategoria_id = :id");
         oci_bind_by_name($stid, ':id', $id);
