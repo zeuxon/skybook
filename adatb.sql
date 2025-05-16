@@ -164,3 +164,112 @@ INSERT INTO Foglalas VALUES (2, 2, 2, DATE '2025-03-21', 'Fizetett', 1, 1, 1);
 INSERT INTO Foglalas VALUES (3, 3, 3, DATE '2025-03-22', 'Függőben', 1, 1, 1);
 INSERT INTO Foglalas VALUES (4, 4, 4, DATE '2025-03-23', 'Fizetett', 1, 1, 1);
 INSERT INTO Foglalas VALUES (5, 5, 5, DATE '2025-03-24', 'Törölve', 1, 1, 1);
+
+BEGIN
+    FOR i IN 6..15 LOOP
+        INSERT INTO Repuloter VALUES (
+            i,
+            'Repülőtér ' || i,
+            'Város ' || i,
+            'Ország ' || i
+        );
+    END LOOP;
+END;
+/
+
+BEGIN
+    FOR i IN 6..15 LOOP
+        INSERT INTO Ut VALUES (
+            i,
+            MOD(i,10)+1,
+            MOD(i+1,10)+1
+        );
+    END LOOP;
+END;
+/
+
+BEGIN
+    FOR i IN 6..15 LOOP
+        INSERT INTO Legitarsasag VALUES (
+            i,
+            'Legitársaság ' || i,
+            'Város ' || i,
+            'Ország ' || i
+        );
+    END LOOP;
+END;
+/
+
+BEGIN
+    FOR i IN 6..15 LOOP
+        INSERT INTO Repulogep VALUES (
+            i,
+            MOD(i,15)+1,
+            150 + (i*10),
+            'Típus ' || i,
+            MOD(i,2)
+        );
+    END LOOP;
+END;
+/
+
+
+BEGIN
+    FOR i IN 6..35 LOOP
+        INSERT INTO Repulojarat VALUES (
+            i,
+            MOD(i,15)+1,
+            MOD(i,15)+1,
+            DATE '2025-04-01' + (i-6),
+            DATE '2025-04-01' + (i-6)
+        );
+    END LOOP;
+END;
+/
+
+BEGIN
+    FOR i IN 6..15 LOOP
+        INSERT INTO Pontgyujtes VALUES (
+            i,
+            MOD(i,5)+1,
+            1000 + (i*100)
+        );
+    END LOOP;
+END;
+/
+
+BEGIN
+    FOR i IN 6..25 LOOP
+        INSERT INTO Biztositas VALUES (
+            i,
+            'Extra biztosítás ' || i,
+            3000 + (i*500)
+        );
+    END LOOP;
+END;
+/
+
+BEGIN
+    FOR i IN 6..15 LOOP
+        INSERT INTO Jegykategoria VALUES (
+            i,
+            'Speciális kategória ' || i,
+            MOD(i,30)
+        );
+    END LOOP;
+END;
+/
+
+
+BEGIN
+    FOR i IN 6..135 LOOP
+        INSERT INTO Jegy VALUES (
+            i,
+            MOD(i,35)+1,
+            MOD(i,15)+1,
+            8000 + MOD(i*123, 40000),
+            0
+        );
+    END LOOP;
+END;
+/

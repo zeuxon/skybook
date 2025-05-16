@@ -114,7 +114,7 @@
                             <form method="POST" action="../../controllers/user/BookingController.php" style="display:inline;">
                                 <input type="hidden" name="jarat_id" value="<?= htmlspecialchars($group['jarat_id']) ?>">
                                 <input type="hidden" name="jegy_id" value="<?= htmlspecialchars($group['ticket_ids'][0]) ?>">
-                                <button type="submit" name="action" value="book">Foglalás<?php echo $group['ticket_ids'][0]?></button>
+                                <button type="submit" name="action" value="book">Foglalás</button>
                             </form>
                         </li>
                     <?php endforeach; ?>
