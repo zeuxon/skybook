@@ -9,6 +9,39 @@
 <body>
     <a href="../../index.php">Vissza</a>
     <h1>Repülőjáratok</h1>
+
+
+    <form method="GET" style="margin-bottom: 20px;">
+        <label>Indulási repülőtér:
+            <select name="from">
+                <option value="">-- Mindegy --</option>
+                <?php foreach ($airports as $airport): ?>
+                    <option value="<?= htmlspecialchars($airport['REPULOTER_ID']) ?>" <?= (isset($_GET['from']) && $_GET['from'] == $airport['REPULOTER_ID']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($airport['NEV']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <label>Érkezési repülőtér:
+            <select name="to">
+                <option value="">-- Mindegy --</option>
+                <?php foreach ($airports as $airport): ?>
+                    <option value="<?= htmlspecialchars($airport['REPULOTER_ID']) ?>" <?= (isset($_GET['to']) && $_GET['to'] == $airport['REPULOTER_ID']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($airport['NEV']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <label>Dátum:
+            <input type="date" name="date" value="<?= isset($_GET['date']) ? htmlspecialchars($_GET['date']) : '' ?>">
+        </label>
+        <button type="submit">Szűrés</button>
+    </form>
+
+    <p>
+        Találatok száma: <strong><?= $flightCount ?></strong>
+    </p>
+
     <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
         <p style="color: green;">Foglalás sikeresen létrehozva!</p>
     <?php endif; ?>
@@ -18,6 +51,7 @@
             <th>Járat ID</th>
             <th>Légitársaság</th>
             <th>Repülőgép Típus</th>
+            <th>Étkezési lehetőség</th>
             <th>Indulási Repülőtér</th>
             <th>Érkezési Repülőtér</th>
             <th>Indulási Idő</th>
@@ -28,14 +62,17 @@
     <tbody>
         <?php 
         $currentFlightId = null;
+        $hasFlights = false;
         foreach ($flights as $flight):
             if ($currentFlightId !== $flight['JARATID']): 
+                $hasFlights = true;
                 $currentFlightId = $flight['JARATID'];
         ?>
             <tr>
                 <td><?= htmlspecialchars($flight['JARATID']) ?></td>
                 <td><?= htmlspecialchars($flight['LEGITARSASAG_NEV']) ?></td>
                 <td><?= htmlspecialchars($flight['REPULOGEP_TIPUS']) ?></td>
+                <td><?= htmlspecialchars($flight['REPULOGEP_ETKEZES']) ? 'Igen' : 'Nem' ?></td>
                 <td><?= htmlspecialchars($flight['INDULASI_REPULOTER_NEV']) ?></td>
                 <td><?= htmlspecialchars($flight['ERKEZESI_REPULOTER_NEV']) ?></td>
                 <td>
@@ -53,7 +90,6 @@
                 <td class="ticket-group">
                     <ul>
                     <?php 
-
                     $ticketGroups = [];
                     foreach ($flights as $ticket) {
                         if ($ticket['JARATID'] === $currentFlightId && !empty($ticket['JEGY_ID'])) {
@@ -91,6 +127,11 @@
             </tr>
             <?php endif; ?>
         <?php endforeach; ?>
+        <?php if (!$hasFlights): ?>
+            <tr>
+                <td colspan="9" style="text-align:center;">Nincs találat a megadott szűrőkre.</td>
+            </tr>
+        <?php endif; ?>
     </tbody>
     </table>
     <h1>Legnépszerűbb járataink</h1>

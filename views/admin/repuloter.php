@@ -44,5 +44,45 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+
+    <h1>Induló járatok száma repülőterenként</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Repülőtér ID</th>
+                <th>Név</th>
+                <th>Induló járatok száma</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($departureCounts as $row): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['REPULOTER_ID']) ?></td>
+                    <td><?= htmlspecialchars($row['NEV']) ?></td>
+                    <td><?= htmlspecialchars($row['INDULASI_JARATOK']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <h1>Érkező járatok száma repülőterenként</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Repülőtér ID</th>
+                <th>Név</th>
+                <th>Érkező járatok száma</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($arrivalCounts as $row): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['REPULOTER_ID']) ?></td>
+                    <td><?= htmlspecialchars($row['NEV']) ?></td>
+                    <td><?= htmlspecialchars($row['ERKEZESI_JARATOK']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </body>
 </html>

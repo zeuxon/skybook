@@ -31,6 +31,23 @@ class FoglalasModel {
         return $bookings;
     }
 
+    public function getBookingCountByUser($felhasznalo_id) {
+        $query = "SELECT COUNT(*) AS BOOKING_COUNT
+                FROM (
+                    SELECT f.foglalas_id
+                    FROM Foglalas f
+                    JOIN Jegy j ON f.jegy_id = j.jegy_id
+                    WHERE f.felhasznalo_id = :felhasznalo_id
+                    GROUP BY f.foglalas_id
+                )";
+        $stid = oci_parse($this->conn, $query);
+        oci_bind_by_name($stid, ':felhasznalo_id', $felhasznalo_id);
+        oci_execute($stid);
+        $row = oci_fetch_assoc($stid);
+        oci_free_statement($stid);
+        return $row ? $row['BOOKING_COUNT'] : 0;
+    }
+
     public function getBookingById($id) {
         $stid = oci_parse($this->conn, "SELECT * FROM Foglalas WHERE foglalas_id = :id");
         oci_bind_by_name($stid, ':id', $id);

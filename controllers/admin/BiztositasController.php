@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $insurance = $model->getAllInsurance();
+    $mostUsedInsurance = $model->getMostUsedInsurance();
     include '../../views/admin/biztositas.php';
 }
 ?>

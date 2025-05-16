@@ -30,6 +30,22 @@ class BiztositasModel {
         return $insurance;
     }
 
+    public function getMostUsedInsurance() {
+        $query = "SELECT b.biztositas_id, b.nev, b.ar, COUNT(f.foglalas_id) AS hasznalat_szama
+                FROM Biztositas b
+                JOIN Foglalas f ON b.biztositas_id = f.biztositas_id
+                GROUP BY b.biztositas_id, b.nev, b.ar
+                ORDER BY hasznalat_szama DESC";
+        $stid = oci_parse($this->conn, $query);
+        oci_execute($stid);
+        $result = [];
+        while ($row = oci_fetch_assoc($stid)) {
+            $result[] = $row;
+        }
+        oci_free_statement($stid);
+        return $result;
+    }
+
     public function createInsurance($nev, $ar) {
         $stid = oci_parse($this->conn, "SELECT NVL(MAX(biztositas_id), 0) + 1 AS next_id FROM Biztositas");
         oci_execute($stid);

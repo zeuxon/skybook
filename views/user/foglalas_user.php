@@ -10,6 +10,8 @@
     <a href="../../index.php">Vissza</a>
     <h1>Foglalásaim</h1>
 
+    Foglalásaim száma: <strong><?= isset($bookingCount) ? $bookingCount : 0 ?></strong>
+
     <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
         <p style="color: green;">Foglalás sikeresen létrehozva!</p>
     <?php elseif (isset($_GET['success']) && $_GET['success'] == 2): ?>
@@ -25,6 +27,8 @@
                 <th>Indulási Repülőtér</th>
                 <th>Érkezési Repülőtér</th>
                 <th>Jegykategória</th>
+                <th>Étkezés</th>
+                <th>Biztosítás név</th>
                 <th>Ár</th>
                 <th>Légitársaság</th>
                 <th>Művelet</th>
@@ -44,7 +48,9 @@
                         <td><?= htmlspecialchars($booking['INDULASI_REPULOTER']) ?></td>
                         <td><?= htmlspecialchars($booking['ERKEZESI_REPULOTER']) ?></td>
                         <td><?= htmlspecialchars($booking['JEGYKATEGORIA']) ?></td>
-                        <td><?= htmlspecialchars($booking['JEGY_AR']) ?> Ft</td>
+                        <td><?= htmlspecialchars($booking['REPULOGEP_ETKEZES']) ? 'Igen' : 'Nem' ?></td>
+                        <td><?= htmlspecialchars($booking['BIZTOSITAS_NEV']) ? htmlspecialchars($booking['BIZTOSITAS_NEV']) : 'Nincs' ?></td>
+                        <td><?= htmlspecialchars($booking['BIZTOSITAS_AR']) ? htmlspecialchars($booking['JEGY_AR']) + htmlspecialchars($booking['BIZTOSITAS_AR']) : htmlspecialchars($booking['JEGY_AR']) ?> Ft</td>
                         <td><?= htmlspecialchars($booking['LEGITARSASAG_NEV']) ?></td>
                         <td>
                             <form method="POST" action="../../controllers/user/BookingController.php">

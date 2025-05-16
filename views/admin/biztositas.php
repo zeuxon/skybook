@@ -40,5 +40,27 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+
+    <h1>Leggyakrabban használt biztosítások</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Név</th>
+                <th>Ár</th>
+                <th>Használat száma</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($mostUsedInsurance as $item): ?>
+                <tr>
+                    <td><?= htmlspecialchars($item['BIZTOSITAS_ID']) ?></td>
+                    <td><?= htmlspecialchars($item['NEV']) ?></td>
+                    <td><?= htmlspecialchars($item['AR']) ?></td>
+                    <td><?= htmlspecialchars($item['HASZNALAT_SZAMA']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </body>
 </html>

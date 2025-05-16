@@ -37,6 +37,7 @@ CREATE TABLE Repulogep (
     legitarsasag_id NUMBER(5) NOT NULL,
     kapacitas NUMBER(3) NOT NULL,
     tipus VARCHAR(255) NOT NULL,
+    etkezes NUMBER(1) DEFAULT 0,
     FOREIGN KEY (legitarsasag_id) REFERENCES Legitarsasag(legitarsasag_id) ON DELETE CASCADE
 );
 
@@ -87,6 +88,8 @@ CREATE TABLE Foglalas (
     statusz VARCHAR(50) NOT NULL,
     sor NUMBER(5),
     oszlop NUMBER(5),
+    biztositas_id NUMBER(5),
+    FOREIGN KEY (biztositas_id) REFERENCES Biztositas(biztositas_id) ON DELETE CASCADE,
     FOREIGN KEY (felhasznalo_id) REFERENCES Felhasznalo(felhasznalo_id) ON DELETE CASCADE,
     FOREIGN KEY (jegy_id) REFERENCES Jegy(jegy_id) ON DELETE CASCADE
 );
@@ -120,11 +123,11 @@ INSERT INTO Legitarsasag VALUES (3, 'Air France', 'Párizs', 'Franciaország');
 INSERT INTO Legitarsasag VALUES (4, 'Delta Airlines', 'Atlanta', 'USA');
 INSERT INTO Legitarsasag VALUES (5, 'KLM', 'Amszterdam', 'Hollandia');
 
-INSERT INTO Repulogep VALUES (1, 1, 180, 'Airbus A320');
-INSERT INTO Repulogep VALUES (2, 2, 200, 'Boeing 737');
-INSERT INTO Repulogep VALUES (3, 3, 250, 'Airbus A330');
-INSERT INTO Repulogep VALUES (4, 4, 300, 'Boeing 777');
-INSERT INTO Repulogep VALUES (5, 5, 220, 'Embraer E190');
+INSERT INTO Repulogep VALUES (1, 1, 180, 'Airbus A320', 1);
+INSERT INTO Repulogep VALUES (2, 2, 200, 'Boeing 737', 1);
+INSERT INTO Repulogep VALUES (3, 3, 250, 'Airbus A330', 0);
+INSERT INTO Repulogep VALUES (4, 4, 300, 'Boeing 777', 0);
+INSERT INTO Repulogep VALUES (5, 5, 220, 'Embraer E190', 1);
 
 INSERT INTO Repulojarat VALUES (1, 1, 1, DATE '2025-03-25', DATE '2025-03-25');
 INSERT INTO Repulojarat VALUES (2, 2, 2, DATE '2025-03-26', DATE '2025-03-26');
@@ -156,8 +159,8 @@ INSERT INTO Jegy VALUES (3, 3, 3, 50000, 0);
 INSERT INTO Jegy VALUES (4, 4, 4, 70000, 0);
 INSERT INTO Jegy VALUES (5, 5, 5, 15000, 0);
 
-INSERT INTO Foglalas VALUES (1, 1, 1, DATE '2025-03-20', 'Fizetett', 1, 1);
-INSERT INTO Foglalas VALUES (2, 2, 2, DATE '2025-03-21', 'Fizetett', 1, 1);
-INSERT INTO Foglalas VALUES (3, 3, 3, DATE '2025-03-22', 'Függőben', 1, 1);
-INSERT INTO Foglalas VALUES (4, 4, 4, DATE '2025-03-23', 'Fizetett', 1, 1);
-INSERT INTO Foglalas VALUES (5, 5, 5, DATE '2025-03-24', 'Törölve', 1, 1);
+INSERT INTO Foglalas VALUES (1, 1, 1, DATE '2025-03-20', 'Fizetett', 1, 1, 1);
+INSERT INTO Foglalas VALUES (2, 2, 2, DATE '2025-03-21', 'Fizetett', 1, 1, 1);
+INSERT INTO Foglalas VALUES (3, 3, 3, DATE '2025-03-22', 'Függőben', 1, 1, 1);
+INSERT INTO Foglalas VALUES (4, 4, 4, DATE '2025-03-23', 'Fizetett', 1, 1, 1);
+INSERT INTO Foglalas VALUES (5, 5, 5, DATE '2025-03-24', 'Törölve', 1, 1, 1);

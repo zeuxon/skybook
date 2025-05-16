@@ -73,32 +73,88 @@ class RepulojaratModel {
     }
 
     public function getAllFlightsWithTickets() {
-        $query = "SELECT r.jaratid, r.indulasi_ido, r.erkezesi_ido, 
-                         g.tipus AS repulogep_tipus, 
-                         lg.nev AS legitarsasag_nev, 
-                         ir.nev AS indulasi_repuloter_nev, 
-                         er.nev AS erkezesi_repuloter_nev,
-                         j.jegy_id, 
-                         jk.nev AS jegykategoria_nev, 
-                         j.ar AS jegy_ar
-                  FROM Repulojarat r
-                  JOIN Repulogep g ON r.repulogep_id = g.repulogep_id
-                  JOIN Legitarsasag lg ON g.legitarsasag_id = lg.legitarsasag_id
-                  JOIN Ut u ON r.ut_id = u.ut_id
-                  JOIN Repuloter ir ON u.indulasi_repuloter_id = ir.repuloter_id
-                  JOIN Repuloter er ON u.erkezesi_repuloter_id = er.repuloter_id
-                  LEFT JOIN Jegy j ON j.jarat_id = r.jaratid AND j.foglalva = 0
-                  LEFT JOIN Jegykategoria jk ON j.jegykategoria_id = jk.jegykategoria_id
-                  ORDER BY r.jaratid, j.jegy_id";
+            $query = "SELECT r.jaratid, r.indulasi_ido, r.erkezesi_ido, 
+                            g.tipus AS repulogep_tipus, 
+                            g.etkezes AS repulogep_etkezes,
+                            lg.nev AS legitarsasag_nev, 
+                            ir.nev AS indulasi_repuloter_nev, 
+                            er.nev AS erkezesi_repuloter_nev,
+                            j.jegy_id, 
+                            jk.nev AS jegykategoria_nev, 
+                            j.ar AS jegy_ar
+                    FROM Repulojarat r
+                    JOIN Repulogep g ON r.repulogep_id = g.repulogep_id
+                    JOIN Legitarsasag lg ON g.legitarsasag_id = lg.legitarsasag_id
+                    JOIN Ut u ON r.ut_id = u.ut_id
+                    JOIN Repuloter ir ON u.indulasi_repuloter_id = ir.repuloter_id
+                    JOIN Repuloter er ON u.erkezesi_repuloter_id = er.repuloter_id
+                    LEFT JOIN Jegy j ON j.jarat_id = r.jaratid AND j.foglalva = 0
+                    LEFT JOIN Jegykategoria jk ON j.jegykategoria_id = jk.jegykategoria_id
+                    ORDER BY r.jaratid, j.jegy_id";
+            $stid = oci_parse($this->conn, $query);
+            oci_execute($stid);
+            $flights = [];
+            while ($row = oci_fetch_assoc($stid)) {
+                $flights[] = $row;
+            }
+            oci_free_statement($stid);
+            return $flights;
+        }
+
+        public function getAllAirports() {
+        $query = "SELECT repuloter_id, nev FROM Repuloter ORDER BY nev";
         $stid = oci_parse($this->conn, $query);
         oci_execute($stid);
-        $flights = [];
+        $airports = [];
         while ($row = oci_fetch_assoc($stid)) {
-            $flights[] = $row;
+            $airports[] = $row;
         }
         oci_free_statement($stid);
-        return $flights;
+        return $airports;
     }
+
+    public function getAllFlightsWithTicketsFiltered($from = null, $to = null, $date = null) {
+            $query = "SELECT r.jaratid, r.indulasi_ido, r.erkezesi_ido, 
+                            g.tipus AS repulogep_tipus, 
+                            g.etkezes AS repulogep_etkezes,
+                            lg.nev AS legitarsasag_nev, 
+                            ir.nev AS indulasi_repuloter_nev, 
+                            er.nev AS erkezesi_repuloter_nev,
+                            j.jegy_id, 
+                            jk.nev AS jegykategoria_nev, 
+                            j.ar AS jegy_ar
+                    FROM Repulojarat r
+                    JOIN Repulogep g ON r.repulogep_id = g.repulogep_id
+                    JOIN Legitarsasag lg ON g.legitarsasag_id = lg.legitarsasag_id
+                    JOIN Ut u ON r.ut_id = u.ut_id
+                    JOIN Repuloter ir ON u.indulasi_repuloter_id = ir.repuloter_id
+                    JOIN Repuloter er ON u.erkezesi_repuloter_id = er.repuloter_id
+                    LEFT JOIN Jegy j ON j.jarat_id = r.jaratid AND j.foglalva = 0
+                    LEFT JOIN Jegykategoria jk ON j.jegykategoria_id = jk.jegykategoria_id
+                    WHERE 1=1";
+            if ($from) {
+                $query .= " AND u.indulasi_repuloter_id = :from_id";
+            }
+            if ($to) {
+                $query .= " AND u.erkezesi_repuloter_id = :to_id";
+            }
+            if ($date) {
+                $query .= " AND TRUNC(r.indulasi_ido) = TO_DATE(:date_q, 'YYYY-MM-DD')";
+            }
+            $query .= " ORDER BY r.jaratid, j.jegy_id";
+
+            $stid = oci_parse($this->conn, $query);
+            if ($from) oci_bind_by_name($stid, ':from_id', $from);
+            if ($to) oci_bind_by_name($stid, ':to_id', $to);
+            if ($date) oci_bind_by_name($stid, ':date_q', $date);
+            oci_execute($stid);
+            $flights = [];
+            while ($row = oci_fetch_assoc($stid)) {
+                $flights[] = $row;
+            }
+            oci_free_statement($stid);
+            return $flights;
+        }
 
     public function getPopularFlights() {
         $query = "SELECT
@@ -122,6 +178,41 @@ class RepulojaratModel {
         }
         oci_free_statement($stid);
         return $flights;
+    }
+
+    public function getFilteredFlightCount($from = null, $to = null, $date = null) {
+        $query = "SELECT COUNT(*) AS FLIGHT_COUNT
+                FROM (
+                    SELECT r.jaratid
+                    FROM Repulojarat r
+                    JOIN Repulogep g ON r.repulogep_id = g.repulogep_id
+                    JOIN Legitarsasag lg ON g.legitarsasag_id = lg.legitarsasag_id
+                    JOIN Ut u ON r.ut_id = u.ut_id
+                    JOIN Repuloter ir ON u.indulasi_repuloter_id = ir.repuloter_id
+                    JOIN Repuloter er ON u.erkezesi_repuloter_id = er.repuloter_id
+                    LEFT JOIN Jegy j ON j.jarat_id = r.jaratid AND j.foglalva = 0
+                    LEFT JOIN Jegykategoria jk ON j.jegykategoria_id = jk.jegykategoria_id
+                    WHERE 1=1";
+        if ($from) {
+            $query .= " AND u.indulasi_repuloter_id = :from_id";
+        }
+        if ($to) {
+            $query .= " AND u.erkezesi_repuloter_id = :to_id";
+        }
+        if ($date) {
+            $query .= " AND TRUNC(r.indulasi_ido) = TO_DATE(:date_q, 'YYYY-MM-DD')";
+        }
+        $query .= " GROUP BY r.jaratid
+                )";
+
+        $stid = oci_parse($this->conn, $query);
+        if ($from) oci_bind_by_name($stid, ':from_id', $from);
+        if ($to) oci_bind_by_name($stid, ':to_id', $to);
+        if ($date) oci_bind_by_name($stid, ':date_q', $date);
+        oci_execute($stid);
+        $row = oci_fetch_assoc($stid);
+        oci_free_statement($stid);
+        return $row ? $row['FLIGHT_COUNT'] : 0;
     }
 
     public function getFlightById($id) {

@@ -25,6 +25,9 @@
     require '../../config/connection.php';
     session_start();
 
+    $biztositasok = [];
+
+
     if (isset($_SESSION['jarat_id'])) {
         echo "Járat ID: " . $_SESSION['jarat_id'];
         $jarat_id = $_SESSION['jarat_id'];
@@ -45,6 +48,13 @@
             $seat_positions[] = $seat_position;
             echo "Sor: " . $seat_position['SOR'] . ", Oszlop: " . $seat_position['OSZLOP'] . "<br>";
         }
+
+        $stid = oci_parse($conn, "SELECT biztositas_id, nev, ar FROM Biztositas");
+        oci_execute($stid);
+        while ($row = oci_fetch_assoc($stid)) {
+            $biztositasok[] = $row;
+        }
+        oci_free_statement($stid);
 
         oci_free_statement($stmt);
         oci_free_statement($cursor);
@@ -91,6 +101,19 @@
             }
             ?>
         </div>
+
+        <div style="margin: 20px 0;">
+            <label for="biztositas_id">Biztosítás (nem kötelező):</label>
+            <select name="biztositas_id" id="biztositas_id">
+                <option value="">Nincs</option>
+                <?php foreach ($biztositasok as $bizt): ?>
+                    <option value="<?= htmlspecialchars($bizt['BIZTOSITAS_ID']) ?>">
+                        <?= htmlspecialchars($bizt['NEV']) ?> (<?= htmlspecialchars($bizt['AR']) ?> Ft)
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
         <button type="submit" class="book-button">Book it!</button>
     </form>
 </body>

@@ -35,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $airports = $model->getAllAirports();
+    $departureCounts = $model->getDepartureCounts();
+    $arrivalCounts = $model->getArrivalCounts();
     include '../../views/admin/repuloter.php';
 }
 ?>

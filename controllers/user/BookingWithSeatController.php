@@ -24,6 +24,7 @@ if (!$felhasznalo_id) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $jarat_id = $_POST['jarat_id'] ?? null;
     $index = $_POST['index'] ?? null;
+    $biztositas_id = !empty($_POST['biztositas_id']) ? $_POST['biztositas_id'] : null;
 
     if (!$jarat_id || !$index) {
         echo "Error: Missing flight ID or seat index.";
@@ -48,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $datum = date('Y-m-d');
     $statusz = 'Fizetetlen';
 
-    $stid = oci_parse($conn, "INSERT INTO Foglalas (foglalas_id, felhasznalo_id, jegy_id, datum, statusz, sor, oszlop)
-                              VALUES (:foglalas_id, :felhasznalo_id, :ticket_id, TO_DATE(:datum, 'YYYY-MM-DD'), :statusz, :sor, :oszlop)");
+    $stid = oci_parse($conn, "INSERT INTO Foglalas (foglalas_id, felhasznalo_id, jegy_id, datum, statusz, sor, oszlop, biztositas_id)
+                            VALUES (:foglalas_id, :felhasznalo_id, :ticket_id, TO_DATE(:datum, 'YYYY-MM-DD'), :statusz, :sor, :oszlop, :biztositas_id)");
     oci_bind_by_name($stid, ':foglalas_id', $next_foglalas_id);
     oci_bind_by_name($stid, ':felhasznalo_id', $felhasznalo_id);
     oci_bind_by_name($stid, ':ticket_id', $ticket_id);
@@ -57,6 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     oci_bind_by_name($stid, ':statusz', $statusz);
     oci_bind_by_name($stid, ':sor', $sor);
     oci_bind_by_name($stid, ':oszlop', $oszlop);
+    if ($biztositas_id) {
+        oci_bind_by_name($stid, ':biztositas_id', $biztositas_id);
+    } else {
+        $null = null;
+        oci_bind_by_name($stid, ':biztositas_id', $null);
+    }
 
     if (oci_execute($stid)) {
 
